@@ -109,7 +109,7 @@ class WishlistViewContoller{
 
 class MockContainer extends StatelessWidget {
     
-  final Wishlist wishlist = new Wishlist("owner",[],WishlistTheme().solidInit(Colors.black, Colors.white));//urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152", null));
+  final Wishlist wishlist = new Wishlist("owner",[],WishlistTheme().solidInit(Colors.white, Colors.black));//urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152", null));
   final Profile currentProfile = new Profile("","https://i.pinimg.com/originals/ca/61/ba/ca61ba3b09fa484064e221f05d918a39.jpg","Miles Morales","29milesb","If you want to nice me you can 😁");
   final controller = new WishlistViewContoller();
 
@@ -271,10 +271,10 @@ class WishlistContent extends StatelessWidget{
             ), 
           ),
           SizedBox(height:10),
-          Text(profile.nickname,style:TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
-          SizedBox(height:10),
+          Text(profile.nickname,style:TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+          SizedBox(height:5),
           Text(profile.bio,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
-          SizedBox(height:20),
+          SizedBox(height:18),
           OutlinedButton(
             onPressed: ()=>{},
             child: 
