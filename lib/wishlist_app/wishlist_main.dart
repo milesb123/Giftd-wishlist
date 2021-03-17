@@ -271,16 +271,16 @@ class WishlistContent extends StatelessWidget{
             ), 
           ),
           SizedBox(height:10),
-          Text(profile.nickname,style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
-          //SizedBox(height:0),
-          Text(profile.bio,style:TextStyle(fontSize: 12,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
-          SizedBox(height:15),
+          Text(profile.nickname,style:TextStyle(fontSize: 25,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+          SizedBox(height:10),
+          Text(profile.bio,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+          SizedBox(height:20),
           OutlinedButton(
             onPressed: ()=>{},
             child: 
             Padding(
               padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-              child: Text("Copy Link 🌍",style: TextStyle(fontSize:10,))
+              child: Text("Copy Link 🌍",style: TextStyle(fontSize:16))
             ),
             style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
           )
@@ -296,15 +296,6 @@ class HelperStyles{
     if(outlined){
       return
       ButtonStyle(
-        textStyle:
-          MaterialStateProperty.resolveWith<TextStyle>((states) => 
-            TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-              fontFamily: "assets/fonts/helvetica_nimbus",
-              fontSize: 16
-            )
-          ),
         foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
           Color _textColor;
 
