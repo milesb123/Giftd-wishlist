@@ -333,7 +333,7 @@ class HelperStyles{
           } else {
             _overlayColor = Colors.transparent;
           }
-          return _overlayColor;
+          return Colors.transparent;
         }),
       );
     }
