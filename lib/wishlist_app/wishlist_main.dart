@@ -260,8 +260,8 @@ class WishlistContent extends StatelessWidget{
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 165,
-            height: 165,
+            width: 175,
+            height: 175,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image:
@@ -275,7 +275,7 @@ class WishlistContent extends StatelessWidget{
           Text(profile.nickname,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
           SizedBox(height:4),
           Text(profile.bio,style:TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
-          SizedBox(height:18),
+          SizedBox(height:14),
           OutlinedButton(
             onPressed: ()=>{},
             child: 
