@@ -327,7 +327,7 @@ class WishlistContent extends StatelessWidget{
           height:30,
           alignment: Alignment.topLeft,
           child: ListView.builder(
-            shrinkWrap: true,
+            //shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
             itemCount: item.links.length,
@@ -339,7 +339,7 @@ class WishlistContent extends StatelessWidget{
                   child: 
                   Text(item.links[link].tag,style:TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18)),
                   onPressed: ()=>{},
-                  //style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
+                  style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
                 ),
               );
             }
