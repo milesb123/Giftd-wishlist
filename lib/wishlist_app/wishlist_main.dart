@@ -121,7 +121,11 @@ class MockContainer extends StatelessWidget {
   final Wishlist wishlist = 
   new Wishlist(
     "owner",
-    [new WishlistItem(message: "You + a north face jacket would make my whole year💕", links:[Link(tag: "Asos",url:""),Link(tag:"Depop",url:"")], media: ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),],
+    [
+      new WishlistItem(message: "You + a north face jacket would make my whole year💕", links:[Link(tag: "Asos",url:""),Link(tag:"Depop",url:"")], media: ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),
+      new WishlistItem(message:"Rims for my car",links:[],media: []),
+      new WishlistItem(message:"A car?",links:[],media: []),
+    ],
     WishlistTheme().solidInit(Colors.white, Colors.black),//.urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152",
     );
   
