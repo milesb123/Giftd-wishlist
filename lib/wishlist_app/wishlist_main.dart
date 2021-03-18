@@ -324,7 +324,7 @@ class WishlistContent extends StatelessWidget{
     if(item.links.isNotEmpty){
       children.addAll([
         Container(
-          height:25,
+          height:30,
           alignment: Alignment.topLeft,
           child: ListView.builder(
             shrinkWrap: true,
@@ -345,7 +345,7 @@ class WishlistContent extends StatelessWidget{
             }
           ),
         ),
-        SizedBox(height:15),
+        SizedBox(height:10),
       ]);
     }
 
