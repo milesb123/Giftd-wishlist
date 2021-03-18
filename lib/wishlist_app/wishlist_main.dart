@@ -317,35 +317,38 @@ class WishlistContent extends StatelessWidget{
             }
           ),
         ),
-        SizedBox(height:15),
+        SizedBox(height:10),
       ]);
     }
 
     if(item.links.isNotEmpty){
       children.addAll([
-        Container(
-          height:30,
+        Align(
           alignment: Alignment.topLeft,
-          child: ListView.builder(
-            //shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            itemCount: item.links.length,
-            itemBuilder:(context,link) {
-              return
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                child: TextButton(
-                  child: 
-                  Text(item.links[link].tag,style:TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18)),
-                  onPressed: ()=>{},
-                  style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
-                ),
-              );
-            }
+          child:
+          Container(
+            height:40,
+            alignment: Alignment.topLeft,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              itemCount: item.links.length,
+              itemBuilder:(context,link) {
+                return
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                  child: TextButton(
+                    child: 
+                    Text(item.links[link].tag,style:TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18)),
+                    onPressed: ()=>{},
+                    style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
+                  ),
+                );
+              }
+            ),
           ),
-        ),
-        SizedBox(height:10),
+        )
       ]);
     }
 
