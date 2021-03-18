@@ -266,7 +266,7 @@ class WishlistContent extends StatelessWidget{
             SizedBox(height:20),
             itemList(),
             SizedBox(height:60),
-            Text("Inspired? Make your own wishlist!",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+            Text("Inspired? Make your own wishlist!",style:TextStyle(fontSize: 14,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
             SizedBox(height:20),
             OutlinedButton(
               onPressed: ()=>{},
@@ -279,6 +279,7 @@ class WishlistContent extends StatelessWidget{
             ),
             SizedBox(height:20),
             Text("You can sign up with Twitter, Instagram and more",style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+            SizedBox(height:100),
           ],
         )
       )
