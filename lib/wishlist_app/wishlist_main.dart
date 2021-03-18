@@ -251,7 +251,7 @@ class WishlistContent extends StatelessWidget{
             SizedBox(height:10),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold))),
+              child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor))),
             ),
             SizedBox(height:20),
             listItemView(wishlist.items[0],0),
