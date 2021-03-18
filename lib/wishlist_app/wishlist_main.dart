@@ -108,9 +108,15 @@ class WishlistViewContoller{
 }
 
 class MockContainer extends StatelessWidget {
-    
-  final Wishlist wishlist = new Wishlist("owner",[],WishlistTheme().urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152", null));
-  final Profile currentProfile = new Profile("","https://i.pinimg.com/originals/ca/61/ba/ca61ba3b09fa484064e221f05d918a39.jpg","Miles Morales","29milesb","If you want to nice me you can 😁");
+  
+  final Wishlist wishlist = 
+  new Wishlist(
+    "owner",
+    [new WishlistItem("You + a north face jacket would make my whole year💕", [], []),],
+    WishlistTheme().urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152",
+    null));
+  
+  final Profile currentProfile = new Profile("","https://i.pinimg.com/originals/ca/61/ba/ca61ba3b09fa484064e221f05d918a39.jpg","Miles Morales","29milesb","If you want to nice me, you can 😁");
   final controller = new WishlistViewContoller();
 
   Widget build(BuildContext context) {
@@ -248,46 +254,58 @@ class WishlistContent extends StatelessWidget{
               child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold))),
             ),
             SizedBox(height:20),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child:
-                    Text("1. You + a north face jacket would make my whole year 💕",style:TextStyle(fontSize: 18))
-                  ),
-                ),
-                SizedBox(height:25),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
-                )
-              ]
-            ),
+            listItemView(wishlist.items[0],0),
             SizedBox(height:15),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child:
-                    Text("2. Rims for my car",style:TextStyle(fontSize: 18))
-                  ),
-                ),
-                SizedBox(height:25),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
-                )
-              ]
-            )
           ],
         )
       )
+    );
+  }
+
+  Widget listItemView(WishlistItem item, int index){
+    return
+    Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child:
+            Text("${(index+1).toString()}. ${item.message}",style:TextStyle(fontSize: 18))
+          ),
+        ),
+        SizedBox(height:15)
+        ,
+        Container(
+          height:120,
+          alignment: Alignment.centerLeft,
+          child: ListView(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            children: [
+              Container(
+                width:200,
+                height: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  image:
+                  DecorationImage(
+                    image:NetworkImage('https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F10%2Fsupreme-the-north-face-fall-2020-collection-info-06.jpg?q=75&w=800&cbr=1&fit=max'),
+                    fit:BoxFit.cover
+                  ),
+                ),
+              )
+            ]
+          ),
+        ),
+        SizedBox(height:25),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+          child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
+        )
+      ]
     );
   }
 
