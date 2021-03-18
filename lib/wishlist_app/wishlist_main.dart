@@ -273,7 +273,7 @@ class WishlistContent extends StatelessWidget{
           ),
           SizedBox(height:10),
           Text(profile.nickname,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
-          SizedBox(height:4),
+          SizedBox(height:5),
           Text(profile.bio,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
           SizedBox(height:10),
           OutlinedButton(
@@ -281,7 +281,7 @@ class WishlistContent extends StatelessWidget{
             child: 
             Padding(
               padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-              child: Text("Copy Link 🌍",style: TextStyle(fontSize:12))
+              child: Text("Copy Link 🌍",style: TextStyle(fontSize:14))
             ),
             style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
           )
