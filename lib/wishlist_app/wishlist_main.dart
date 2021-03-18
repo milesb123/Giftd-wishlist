@@ -262,27 +262,34 @@ class WishlistContent extends StatelessWidget{
         Column(
           children: [
             listHeader(),
-            SizedBox(height:10),
+            SizedBox(height:20),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor))),
             ),
-            SizedBox(height:20),
+            SizedBox(height:25),
             itemList(),
             SizedBox(height:60),
-            Text("Inspired? Make your own wishlist!",style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
-            SizedBox(height:20),
-            OutlinedButton(
-              onPressed: ()=>{},
-              child: 
-              Padding(
-                padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                child: Text("Sign Up 🎁",style: TextStyle(fontSize:14))
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                children:[
+                  Text("Inspired? Make your own wishlist!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+                  SizedBox(height:20),
+                  OutlinedButton(
+                    onPressed: ()=>{},
+                    child: 
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                      child: Text("Sign Up 🎁",style: TextStyle(fontSize:14))
+                    ),
+                    style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+                  ),
+                  SizedBox(height:20),
+                  Text("You can sign up with Twitter, Instagram and more",textAlign: TextAlign.center,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+                ]
               ),
-              style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
             ),
-            SizedBox(height:20),
-            Text("You can sign up with Twitter, Instagram and more",style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
             SizedBox(height:100),
           ],
         )
@@ -418,9 +425,9 @@ class WishlistContent extends StatelessWidget{
             ), 
           ),
           SizedBox(height:10),
-          Text(profile.nickname,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+          Text(profile.nickname,textAlign: TextAlign.center,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
           SizedBox(height:5),
-          Text(profile.bio,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+          Text(profile.bio,textAlign: TextAlign.center,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
           SizedBox(height:16),
           OutlinedButton(
             onPressed: ()=>{},
