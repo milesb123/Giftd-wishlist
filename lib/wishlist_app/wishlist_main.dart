@@ -245,7 +245,7 @@ class WishlistContent extends StatelessWidget{
             SizedBox(height:10),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold))),
+              child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold))),
             ),
             SizedBox(height:20),
             Column(
@@ -259,7 +259,7 @@ class WishlistContent extends StatelessWidget{
                     Text("1. You + a north face jacket would make my whole year 💕",style:TextStyle(fontSize: 18))
                   ),
                 ),
-                SizedBox(height:20),
+                SizedBox(height:25),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                   child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
@@ -278,7 +278,7 @@ class WishlistContent extends StatelessWidget{
                     Text("2. Rims for my car",style:TextStyle(fontSize: 18))
                   ),
                 ),
-                SizedBox(height:20),
+                SizedBox(height:25),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                   child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
