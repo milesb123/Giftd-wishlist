@@ -242,9 +242,49 @@ class WishlistContent extends StatelessWidget{
         Column(
           children: [
             listHeader(),
+            SizedBox(height:10),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold))),
+            ),
             SizedBox(height:20),
-            //Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold))),
-            SizedBox(height:20),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child:
+                    Text("1. You + a north face jacket would make my whole year 💕")
+                  ),
+                ),
+                SizedBox(height:20),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
+                )
+              ]
+            ),
+            SizedBox(height:15),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child:
+                    Text("2. Rims for my car")
+                  ),
+                ),
+                SizedBox(height:20),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
+                )
+              ]
+            )
           ],
         )
       )
@@ -257,7 +297,7 @@ class WishlistContent extends StatelessWidget{
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: 
       Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
             width: 180,
@@ -275,7 +315,7 @@ class WishlistContent extends StatelessWidget{
           Text(profile.nickname,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
           SizedBox(height:5),
           Text(profile.bio,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
-          SizedBox(height:10),
+          SizedBox(height:16),
           OutlinedButton(
             onPressed: ()=>{},
             child: 
