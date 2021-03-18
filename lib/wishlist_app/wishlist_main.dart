@@ -256,7 +256,7 @@ class WishlistContent extends StatelessWidget{
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child:
-                    Text("1. You + a north face jacket would make my whole year 💕")
+                    Text("1. You + a north face jacket would make my whole year 💕",style:TextStyle(fontSize: 18))
                   ),
                 ),
                 SizedBox(height:20),
@@ -275,7 +275,7 @@ class WishlistContent extends StatelessWidget{
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child:
-                    Text("2. Rims for my car")
+                    Text("2. Rims for my car",style:TextStyle(fontSize: 18))
                   ),
                 ),
                 SizedBox(height:20),
