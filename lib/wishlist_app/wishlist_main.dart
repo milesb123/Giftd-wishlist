@@ -31,13 +31,22 @@ class Wishlist{
 
 class WishlistItem{
   String message;
-  List<Map> links;
+  List<Link> links;
   List<String> media;
 
-  WishlistItem(String message,List<Map> links, List<String> media){
+  WishlistItem({String message,List<Link> links, List<String> media}){
     this.message = message;
     this.links = links;
     this.media = media;
+  }
+}
+
+class Link{
+  String tag;
+  String url;
+  Link({String tag, String url}){
+    this.tag = tag;
+    this.url = url;
   }
 }
 
@@ -112,7 +121,7 @@ class MockContainer extends StatelessWidget {
   final Wishlist wishlist = 
   new Wishlist(
     "owner",
-    [new WishlistItem("You + a north face jacket would make my whole year💕", [], ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),],
+    [new WishlistItem(message: "You + a north face jacket would make my whole year💕", links:[Link(tag: "Asos",url:""),Link(tag:"Depop",url:"")], media: ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),],
     WishlistTheme().solidInit(Colors.white, Colors.black),//.urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152",
     );
   
@@ -255,7 +264,7 @@ class WishlistContent extends StatelessWidget{
             ),
             SizedBox(height:20),
             listItemView(wishlist.items[0],0),
-            SizedBox(height:15),
+            SizedBox(height:100),
           ],
         )
       )
@@ -313,7 +322,31 @@ class WishlistContent extends StatelessWidget{
     }
 
     if(item.links.isNotEmpty){
-
+      children.addAll([
+        Container(
+          height:25,
+          alignment: Alignment.topLeft,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            itemCount: item.links.length,
+            itemBuilder:(context,link) {
+              return
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                child: TextButton(
+                  child: 
+                  Text(item.links[link].tag,style:TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18)),
+                  onPressed: ()=>{},
+                  style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
+                ),
+              );
+            }
+          ),
+        ),
+        SizedBox(height:15),
+      ]);
     }
 
     children.addAll([
