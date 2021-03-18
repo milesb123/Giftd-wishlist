@@ -32,9 +32,9 @@ class Wishlist{
 class WishlistItem{
   String message;
   List<Map> links;
-  List<Map> media;
+  List<String> media;
 
-  WishlistItem(String message,List<Map> links, List<Map> media){
+  WishlistItem(String message,List<Map> links, List<String> media){
     this.message = message;
     this.links = links;
     this.media = media;
@@ -112,9 +112,9 @@ class MockContainer extends StatelessWidget {
   final Wishlist wishlist = 
   new Wishlist(
     "owner",
-    [new WishlistItem("You + a north face jacket would make my whole year💕", [], []),],
-    WishlistTheme().urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152",
-    null));
+    [new WishlistItem("You + a north face jacket would make my whole year💕", [], ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),],
+    WishlistTheme().solidInit(Colors.white, Colors.black),//.urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152",
+    );
   
   final Profile currentProfile = new Profile("","https://i.pinimg.com/originals/ca/61/ba/ca61ba3b09fa484064e221f05d918a39.jpg","Miles Morales","29milesb","If you want to nice me, you can 😁");
   final controller = new WishlistViewContoller();
@@ -263,49 +263,71 @@ class WishlistContent extends StatelessWidget{
   }
 
   Widget listItemView(WishlistItem item, int index){
-    return
-    Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
+    
+    List<Widget> children = [];
+
+    children.addAll([
+      Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: Align(
             alignment: Alignment.centerLeft,
             child:
-            Text("${(index+1).toString()}. ${item.message}",style:TextStyle(fontSize: 18))
+            Text("${(index+1).toString()}. ${item.message}",style:TextStyle(fontSize: 18,color: wishlist.theme.accentColor))
           ),
         ),
         SizedBox(height:15)
-        ,
+    ]);
+
+    if(item.media.isNotEmpty){
+      children.addAll([
         Container(
-          height:120,
+          height:160,
           alignment: Alignment.centerLeft,
-          child: ListView(
+          child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-            children: [
-              Container(
-                width:200,
-                height: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  image:
-                  DecorationImage(
-                    image:NetworkImage('https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2020%2F10%2Fsupreme-the-north-face-fall-2020-collection-info-06.jpg?q=75&w=800&cbr=1&fit=max'),
-                    fit:BoxFit.cover
+            itemCount: item.media.length,
+            itemBuilder:(context,media){
+              return
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                child: Container(
+                  width:240,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    image:
+                    DecorationImage(
+                      image:NetworkImage(item.media[media]),
+                      fit:BoxFit.cover
+                    ),
                   ),
                 ),
-              )
-            ]
+              );
+            }
           ),
         ),
-        SizedBox(height:25),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-          child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
-        )
-      ]
+        SizedBox(height:15),
+      ]);
+    }
+
+    if(item.links.isNotEmpty){
+
+    }
+
+    children.addAll([
+      SizedBox(height:10),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+        child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
+      )
+    ]);
+
+    return
+    Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children:  children
     );
   }
 
