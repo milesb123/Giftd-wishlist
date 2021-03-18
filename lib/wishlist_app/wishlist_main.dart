@@ -248,6 +248,7 @@ class WishlistContent extends StatelessWidget{
   WishlistContent(this.profile,this.wishlist);
 
   Widget build(BuildContext context) {
+
     return
     SizedBox(
       width:double.infinity,
@@ -263,12 +264,36 @@ class WishlistContent extends StatelessWidget{
               child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor))),
             ),
             SizedBox(height:20),
-            listItemView(wishlist.items[0],0),
-            SizedBox(height:100),
+            itemList(),
+            SizedBox(height:60),
+            Text("Inspired? Make your own wishlist!",style:TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+            SizedBox(height:20),
+            OutlinedButton(
+              onPressed: ()=>{},
+              child: 
+              Padding(
+                padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                child: Text("Sign Up 🎁",style: TextStyle(fontSize:14))
+              ),
+              style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+            ),
+            SizedBox(height:20),
+            Text("You can sign up with Twitter, Instagram and more",style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
           ],
         )
       )
     );
+  }
+
+  Widget itemList(){
+    List<Widget> children = [];
+
+    for(int i = 0; i<wishlist.items.length; i++){
+      children.add(listItemView(wishlist.items[i],i));
+      children.add(SizedBox(height:20));
+    }
+
+    return Column(children: children);
   }
 
   Widget listItemView(WishlistItem item, int index){
