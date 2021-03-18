@@ -257,10 +257,11 @@ class WishlistContent extends StatelessWidget{
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: 
       Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 180,
-            height: 180,
+            width: 165,
+            height: 165,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image:
@@ -271,16 +272,16 @@ class WishlistContent extends StatelessWidget{
             ), 
           ),
           SizedBox(height:10),
-          Text(profile.nickname,style:TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
-          SizedBox(height:5),
-          Text(profile.bio,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+          Text(profile.nickname,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+          SizedBox(height:4),
+          Text(profile.bio,style:TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
           SizedBox(height:18),
           OutlinedButton(
             onPressed: ()=>{},
             child: 
             Padding(
               padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-              child: Text("Copy Link 🌍",style: TextStyle(fontSize:16))
+              child: Text("Copy Link 🌍",style: TextStyle(fontSize:12))
             ),
             style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
           )
