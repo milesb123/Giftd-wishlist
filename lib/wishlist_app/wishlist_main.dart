@@ -339,7 +339,7 @@ class WishlistContent extends StatelessWidget{
                   child: 
                   Text(item.links[link].tag,style:TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18)),
                   onPressed: ()=>{},
-                  style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
+                  //style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
                 ),
               );
             }
