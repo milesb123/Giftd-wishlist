@@ -3,6 +3,7 @@ import 'dart:js';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //USE CASE
 // Wishlist and User objects will be flowed from the top down, by reference
@@ -122,7 +123,7 @@ class MockContainer extends StatelessWidget {
   new Wishlist(
     "owner",
     [
-      new WishlistItem(message: "You + a north face jacket would make my whole year💕", links:[Link(tag: "Asos",url:""),Link(tag:"Depop",url:"")], media: ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),
+      new WishlistItem(message: "You + a north face jacket would make my whole year💕", links:[Link(tag: "Asos",url:"https://www.asos.com/"),Link(tag:"Depop",url:"https://www.depop.com/")], media: ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),
       new WishlistItem(message:"Rims for my car",links:[],media: []),
       new WishlistItem(message:"A car?",links:[],media: []),
     ],
@@ -378,7 +379,9 @@ class WishlistContent extends StatelessWidget{
                   child: TextButton(
                     child: 
                     Text(item.links[link].tag,style:TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.normal,fontSize: 18)),
-                    onPressed: ()=>{},
+                    onPressed: ()=>{
+                      openURL(item.links[link].url)
+                    },
                     style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
                   ),
                 );
@@ -441,6 +444,14 @@ class WishlistContent extends StatelessWidget{
         ]
       ),
     );
+  }
+
+  void openURL(String url)async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
 
