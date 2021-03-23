@@ -3,6 +3,7 @@ import 'dart:js';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:responsive_web/Models/profile.dart';
 import 'package:responsive_web/Models/wishlist.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -657,7 +658,7 @@ class WishlistContent extends StatelessWidget{
           Text(profile.bio,textAlign: TextAlign.center,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
           SizedBox(height:16),
           OutlinedButton(
-            onPressed: ()=>{},
+            onPressed: () => {Clipboard.setData(new ClipboardData(text: "https://giftd-wishlist.vercel.app/#/"+profile.username))},
             child: 
             Padding(
               padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
