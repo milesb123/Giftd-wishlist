@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/widgets.dart' as widgetPackage;
-import 'package:responsive_web/pages/home_view.dart';
-import 'package:responsive_web/pages/wishlist_main.dart';
+import 'package:responsive_web/pages/home_page.dart';
+import 'package:responsive_web/pages/wishlist_page/wishlist_main.dart';
 
 class RouteManager{
   static FluroRouter router = FluroRouter();
@@ -16,7 +16,7 @@ class RouteManager{
       }
 
       if(username == null){
-        return HomeView();
+        return HomePage();
       }
       else{
         return WishlistPage(username);
