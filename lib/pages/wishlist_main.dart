@@ -12,6 +12,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //USE CASE
 // Wishlist and User objects will be flowed from the top down, by reference
 
+//TODO:
+// - Break up structure a lil bit
+// - Routing
+// - Test view with varying inputs and sizing
+
+
+//BUGS:
+// - text must find new line
+
 class WishlistViewContoller{
   
   /*
@@ -543,11 +552,12 @@ class WishlistContent extends StatelessWidget{
             Text("${(index+1).toString()}. ${item.message}",style:TextStyle(fontSize: 18,color: wishlist.theme.accentColor))
           ),
         ),
-        SizedBox(height:15)
+        SizedBox(height:10)
     ]);
 
     if(item.media.isNotEmpty){
       children.addAll([
+        SizedBox(height: 5),
         Container(
           height:160,
           alignment: Alignment.centerLeft,
