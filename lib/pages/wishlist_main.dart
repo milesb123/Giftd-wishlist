@@ -304,14 +304,7 @@ class WishlistPageState extends State<WishlistPage> {
   }
 
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: getScaffold(context)
-    );
+    return getScaffold(context);
   }
 
   Widget getScaffold(BuildContext context){
