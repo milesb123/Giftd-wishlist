@@ -1,137 +1,298 @@
+import 'dart:collection';
 import 'dart:js';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_web/Models/profile.dart';
+import 'package:responsive_web/Models/wishlist.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 //USE CASE
 // Wishlist and User objects will be flowed from the top down, by reference
-class Profile{
-  String userID;
-  String imageURL;
-  String nickname;
-  String username;
-  String bio;
-
-  Profile(this.userID,this.imageURL,this.nickname,this.username,this.bio);
-}
-
-class Wishlist{
-  String listID;
-  String ownerID;
-  var items = <WishlistItem>[];
-  var theme;
-
-  Wishlist(String owner, List<WishlistItem> items,WishlistTheme theme)  {
-    this.ownerID = owner;
-    this.items = items;
-    this.theme = theme;
-  }
-}
-
-class WishlistItem{
-  String message;
-  List<Link> links;
-  List<String> media;
-
-  WishlistItem({String message,List<Link> links, List<String> media}){
-    this.message = message;
-    this.links = links;
-    this.media = media;
-  }
-}
-
-class Link{
-  String tag;
-  String url;
-  Link({String tag, String url}){
-    this.tag = tag;
-    this.url = url;
-  }
-}
-
-class WishlistTheme{
-  Color accentColor;
-  Widget background;
-  Widget navBackground;
-
-  //default
-  WishlistTheme(){
-    accentColor = Colors.black;
-    background = SizedBox.expand(child:Container(color:Colors.white));
-  }
-
-  //Solid Color init
-  WishlistTheme solidInit(Color accentColor, Color backgroundColor){
-    this.accentColor = accentColor;
-    this.background = SizedBox.expand(child:Container(color:backgroundColor));
-    return this;
-  }
-
-  //Linear Gradient init
-  WishlistTheme linearGradientInit(Color accentColor, List<Color>gradientColors, Color navColor){
-    this.accentColor = accentColor;
-    this.background = 
-    SizedBox.expand(
-      child:
-      Container(
-        decoration: 
-        BoxDecoration(
-          gradient:
-          LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,colors: gradientColors)
-        ),
-      )
-    );
-    this.navBackground = SizedBox.expand(child:Container(color:navColor));
-    return this;
-  }
-
-  //External Image init
-  WishlistTheme urlImageInit(Color accentColor, String imageURL, Color navColor){
-    this.accentColor = accentColor;
-    this.background = 
-    SizedBox.expand(
-      child: 
-      Container(
-        decoration: BoxDecoration(
-          image:
-          DecorationImage(
-            image: NetworkImage(imageURL),
-            fit:BoxFit.cover
-          ),
-        ),
-      ),
-    );
-
-    this.navBackground = navColor == null ? this.background : SizedBox.expand(child:Container(color:navColor));
-    return this;
-  }
-  
-  Widget getNavbarBackground(){
-    return navBackground == null ? background : navBackground;
-  }
-}
 
 class WishlistViewContoller{
-  GlobalKey<ScaffoldState> mobileDrawerKey = GlobalKey();
-}
-
-class MockContainer extends StatelessWidget {
   
-  final Wishlist wishlist = 
+  /*
+  Wishlist wishlist = 
   new Wishlist(
-    "owner",
-    [
-      new WishlistItem(message: "You + a north face jacket would make my whole year💕", links:[Link(tag: "Asos",url:"https://www.asos.com/"),Link(tag:"Depop",url:"https://www.depop.com/")], media: ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),
-      new WishlistItem(message:"Rims for my car",links:[],media: []),
-      new WishlistItem(message:"A car?",links:[],media: []),
-    ],
-    WishlistTheme().solidInit(Colors.white, Colors.black),//.urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152",
+      "owner",
+      [
+        new WishlistItem(message: "You + a north face jacket would make my whole year💕", links:[Link(tag: "Asos",url:"https://www.asos.com/"),Link(tag:"Depop",url:"https://www.depop.com/")], media: ["https://images.stockx.com/images/Supreme-The-North-Face-Expedition-Jacket-Black.jpg?fit=fill&bg=FFFFFF&w=700&h=500&auto=format,compress&q=90&dpr=2&trim=color&updated_at=1606320522","https://i.gifer.com/WiZX.gif"]),
+        new WishlistItem(message:"Rims for my car",links:[],media: []),
+        new WishlistItem(message:"A car?",links:[],media: []),
+      ],
+      WishlistTheme().solidInit(Colors.white, Colors.black),//.urlImageInit(Colors.black, "https://cdn.shopify.com/s/files/1/2656/8500/products/diamond-glitter-blue-sky-wallpaper-902004_1024x.jpg?v=1554116152",
     );
   
-  final Profile currentProfile = new Profile("","https://i.pinimg.com/originals/ca/61/ba/ca61ba3b09fa484064e221f05d918a39.jpg","Miles Morales","29milesb","If you want to nice me, you can 😁");
-  final controller = new WishlistViewContoller();
+
+  Profile currentProfile = new Profile("","https://i.pinimg.com/originals/ca/61/ba/ca61ba3b09fa484064e221f05d918a39.jpg","Miles Morales","29milesb","If you want to nice me, you can 😁");
+  */
+
+  
+  //Cached Wishlist
+  Wishlist wishlist;
+
+  //Cached Profile
+  Profile currentProfile;
+
+  CollectionReference profiles = FirebaseFirestore.instance.collection('Profiles');
+  CollectionReference public_lists = FirebaseFirestore.instance.collection('Public_Lists');
+
+
+  GlobalKey<ScaffoldState> mobileDrawerKey = GlobalKey();
+  Widget content = SpinKitDualRing(color: Colors.white);
+
+  Future<void> getProfile(String username,Function(dynamic) update) {
+      // Call the user's CollectionReference to add a new user
+      return profiles
+          .where('username',isEqualTo: username)
+          .limit(1)
+          .get()
+          .then((snapshot){
+            if(snapshot.docs[0] != null){
+              QueryDocumentSnapshot doc = snapshot.docs[0];
+              //Create profile from data
+              String userID = doc.id;
+              String imageURL = doc.data()['imageURL'];
+              String nickname = doc.data()['nickname'];
+              String username = doc.data()['username'];
+              String bio = doc.data()['bio'];
+
+              if(userID == null || username == null){
+                //Return error if fields missing
+                update("Missing Required Fields");
+                return;
+              }
+              else{
+                //Build Profile
+                currentProfile = new Profile(
+                  userID,
+                  imageURL == null ? "http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png" : imageURL.toString(),
+                  nickname == null ? username : nickname.toString(),
+                  username,
+                  bio == null ? "" : bio.toString()
+                );
+                getList(doc.id,update);
+              }
+            }
+            else{
+              update("Profile Fetch Error");
+            }
+          })
+          .catchError((error) {
+            update(error);
+          });
+  }
+
+  Future<void> getList(String userID,Function(dynamic) update) {
+      // Call the user's CollectionReference to add a new user
+      return public_lists
+          .where('ownerID',isEqualTo: userID)
+          .limit(1)
+          .get()
+          .then((snapshot){
+            if(snapshot.docs[0] != null){
+              QueryDocumentSnapshot doc = snapshot.docs[0];
+              //Build wishlist
+              
+              String ownerID = doc.data()['ownerID'];
+              var items = <WishlistItem>[];
+              List rawItems = doc.data()['items'];
+              
+              //Prepare Items
+              if(rawItems != null){
+                
+                for(int i=0; i<rawItems.length; i++){
+                  Map item = rawItems[i];
+                  
+                  //Prepare Message
+                  String message = item['message'];
+                  
+                  //Prepare Links
+                  List<Link> links = [];
+                  List rawLinks = item['links'];
+
+                  if(rawLinks != null){
+                    for(int j=0; j<rawLinks.length;j++){
+                      Map link = rawLinks[j];
+                      String tag = link['tag'];
+                      String url = link['url'];
+                      
+                      if(url != null){
+                        links.add(Link(tag: tag == null ? url : tag,url:url));
+                      }
+                    }
+                  }
+                  
+                  //Prepare Media
+                  List<String> media = [];
+                  List rawMedia = item['media'];
+                  
+                  if(rawMedia != null){
+                    for(int j=0; j<rawMedia.length; j++){
+                      String contentLink = rawMedia[j];
+                      if(contentLink != null){
+                        media.add(contentLink);
+                      }
+                    }
+                  }
+                  
+                  if(!(message == null && links == null && media == null)){
+                    //Valid Item
+                    items.add(new WishlistItem(message: message,links:links,media:media));
+                  }
+
+                }
+
+                //Prepare Theme
+                WishlistTheme theme = buildTheme(doc.data()['theme']);
+
+                if(items.isEmpty){
+                  print(items);
+                  update("Empty List");
+                }
+
+                if(ownerID == null){
+                  update("Required fields missing");
+                }
+
+                //Publish Wishlist
+                wishlist = new Wishlist(ownerID.toString(),items,theme == null ? WishlistTheme().solidInit(Colors.white, Colors.pink) : theme);
+
+                update(null);
+              }
+              else{
+                update("Items field missing");
+              }
+            }
+            else{
+              update("List Fetch Error");
+            }
+          })
+          .catchError((error){
+            update(error);
+          });
+  }
+
+  WishlistTheme buildTheme(Map rawTheme){
+    String type = rawTheme['type'];
+    
+    if(type == null){
+      return null;
+    }
+
+    switch(type){
+      case "solid":{
+        print("Solid detected");
+        Map rawAccent = rawTheme['accentColor'];
+        Map rawColor = rawTheme['backgroundColor'];
+
+        Color accent = parseColor(rawAccent);
+        Color background = parseColor(rawColor);
+        
+        if(rawAccent == null || rawColor == null || accent == null || background == null){
+          return null;
+        }
+
+        return WishlistTheme().solidInit(accent, background);
+      }
+      break;
+
+      case "lGradient":{
+        Map rawAccent = rawTheme['accentColor'];
+        List rawColors = rawTheme['backgroundColors'];
+
+        Color accent = parseColor(rawAccent);
+
+        if(rawAccent == null || rawColors == null || accent == null){
+          return null;
+        }
+
+        
+        List<Color> backgroundColors = [];
+
+        //Build Colors
+        for(int i = 0; i<rawColors.length; i++){
+          Map rawColor = rawColors[i];
+          Color color = parseColor(rawColor);
+          if(color != null){
+            backgroundColors.add(color);
+          }
+        }
+        
+        if(backgroundColors.isEmpty){
+          return null;
+        }
+
+        //Value for color will be null if a navColor is not present
+        Color navColor = parseColor(rawTheme['navColor']);
+
+        return WishlistTheme().linearGradientInit(accent, backgroundColors, navColor);
+      }
+      break;
+
+      case "urlImage":{
+        Map rawAccent = rawTheme['accentColor'];
+        String url = rawTheme['url'];
+
+        Color accent = parseColor(rawAccent);
+
+        if(rawAccent == null || url == null || accent == null){
+          return null;
+        }
+        
+        //Value for color will be null if a navColor is not present
+        Color navColor = parseColor(rawTheme['navColor']);
+
+        //Build Theme
+        return WishlistTheme().urlImageInit(accent, url, navColor);
+      }
+      break;
+
+      default:{return null;}
+      break;
+    }
+
+  }
+
+  Color parseColor(Map data){
+    if(data == null){
+      return null;
+    }
+
+    int red = data['r'];
+    int green = data['g'];
+    int blue = data['b'];
+
+    if(red == null || green == null || blue == null){
+      return null;
+    }
+
+    return Color.fromRGBO(red, green, blue, 1);
+  }
+
+}
+
+class WishlistPage extends StatefulWidget {
+
+  final String name;
+
+  WishlistPage([this.name]);
+
+  @override
+  WishlistPageState createState() => WishlistPageState(name);
+}
+
+class WishlistPageState extends State<WishlistPage> {
+  
+  var controller = new WishlistViewContoller();
+  var defaultTheme = new WishlistTheme().solidInit(Colors.white, Colors.black);
+
+  WishlistPageState(String name){
+    configureController(name);
+  }
 
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -145,6 +306,10 @@ class MockContainer extends StatelessWidget {
   }
 
   Widget getScaffold(BuildContext context){
+    
+    //Get profile and wishlist
+
+    //On Successful load
     return
     LayoutBuilder(builder: (context,constraints){
       if(constraints.maxWidth > 600){
@@ -175,6 +340,58 @@ class MockContainer extends StatelessWidget {
     });
   }
 
+  void configureController(String name){
+    if(controller.currentProfile == null){
+      controller.getProfile(name,(error){
+        if(error == null){
+          //Successful
+          //configureControllerWishlist(controller.currentProfile);
+          print("Succeeded");
+          controller.content = WishlistContent(controller.currentProfile,controller.wishlist);
+          setState(() {});
+        }
+        else{
+          //Unsuccessful: No Profile
+          print(error);
+          controller.content = failureView();
+          setState(() {});
+        }
+      });
+      //Load Profile
+    }
+    else{
+      //Get Profile
+      //configureControllerWishlist(controller.currentProfile);
+      controller.content = WishlistContent(controller.currentProfile,controller.wishlist);
+    }
+    //On success -> set controller profile and wishlist ,set content widget, update view
+    //On failure -> set content widget, update view
+
+    //NOTE: Load list will run one run once unless the page is refreshed and controller is reset
+  }
+
+  void configureControllerWishlist(Profile currentProfile){
+    //Profile exists
+    if(controller.wishlist == null){
+      //Load wishlist
+      if(true){
+        //Successful
+      }
+      else{
+        //Unsuccessful: No Wishlist
+        controller.content = failureView();
+      }
+    }
+    else{
+      //Get cached wishlist
+      controller.content = WishlistContent(controller.currentProfile,controller.wishlist);
+    }
+  }
+
+  Widget failureView(){
+    return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
+  }
+
   Widget desktopStructure(){
     return
     Stack(
@@ -191,7 +408,7 @@ class MockContainer extends StatelessWidget {
               child:
               Stack(
                 children:[
-                  wishlist.theme.background,
+                  getTheme().background,
                   Container(
                     child: 
                     ListView(
@@ -199,7 +416,7 @@ class MockContainer extends StatelessWidget {
                         Padding(
                             //Top padding navbar height
                             padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
-                            child: WishlistContent(currentProfile,wishlist),
+                            child: controller.content,
                         ),
                       ]
                     )
@@ -210,7 +427,7 @@ class MockContainer extends StatelessWidget {
           )
         )
       ),
-      DynamicAppBar(wishlist.theme).desktopNavBar(),
+      DynamicAppBar(getTheme()).desktopNavBar(),
     ]);
   }
 
@@ -218,19 +435,19 @@ class MockContainer extends StatelessWidget {
     return
     Column(
       children: [
-        DynamicAppBar(wishlist.theme).mobileNavBar(controller),
-        Container(height:1,color: wishlist.theme.accentColor),
+        DynamicAppBar(getTheme()).mobileNavBar(controller),
+        Container(height:1,color: getTheme().accentColor),
         Expanded(
           child: 
           Stack(
             children:[
-              wishlist.theme.background,
+              getTheme().background,
               Container( 
                 child:
                 ListView(children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: WishlistContent(currentProfile,wishlist),
+                    child: controller.content,
                   )
                   ]
                 ),
@@ -240,6 +457,10 @@ class MockContainer extends StatelessWidget {
         )
       ]
     );
+  }
+
+  WishlistTheme getTheme(){
+    return controller.wishlist == null ? defaultTheme : controller.wishlist.theme;
   }
 
 }
