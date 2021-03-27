@@ -53,7 +53,7 @@ class WishlistPageState extends State<WishlistPage> {
       if(constraints.maxWidth > 600){
         return
         Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Color.fromRGBO(30, 30, 30, 1),
           body: desktopStructure()
         );
       }
@@ -222,7 +222,7 @@ class WishlistContent extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
-                  Icon(Icons.add,color: wishlist.theme.accentColor,size: 25)
+                  Icon(Icons.add,color: wishlist.theme.accentColor,size: 30)
                 ],
               ),
             ),
