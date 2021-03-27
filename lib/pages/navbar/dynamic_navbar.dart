@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:responsive_web/Models/wishlist.dart';
+import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/pages/wishlist_page/wishlist_controller.dart';
 
 class DynamicAppBar{
@@ -9,6 +10,38 @@ class DynamicAppBar{
 
   DynamicAppBar(WishlistTheme theme){
     this.theme = theme;
+  }
+
+  static Widget mobileDrawerContent(){
+    return
+    Container(
+      width:200,
+      child: 
+      Drawer(
+        elevation: 2,
+        child: 
+        SizedBox.expand(child:Container(
+          color:Colors.white,
+          child:
+          Align(
+            alignment:Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: 
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height:20),
+                  Text("Sign In",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),
+                  SizedBox(height:10),
+                  Text("Sign Up 🎁",style: TextStyle(fontSize:16,decoration: TextDecoration.underline))
+                ]
+              )
+            ),
+          )
+        ))
+      ),
+    );
   }
 
   Widget mobileNavBar(WishlistPageContoller controller){
@@ -67,8 +100,37 @@ class DynamicAppBar{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset("assets/images/logo_capsule.png",height:50),
-            Text("")
+            GestureDetector(
+              onTap:(){
+                print("Tapped");
+              },
+              child:
+              Image.asset("assets/images/logo_capsule.png",height:50)
+            ),
+            Row(
+              children:[
+                OutlinedButton(
+                  onPressed: ()=>{},
+                  child: 
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    child: Text("Sign In",style: TextStyle(fontSize:14))
+                  ),
+                  style: HelperStyles.defaultButtonStyle(true,Colors.white),
+                ),
+                SizedBox(width:10)
+                ,
+                OutlinedButton(
+                  onPressed: ()=>{},
+                  child: 
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    child: Text("Sign Up",style: TextStyle(fontSize:14))
+                  ),
+                  style: HelperStyles.defaultButtonStyle(true,Colors.white),
+                )
+              ]
+            )
           ]
         ),
       ),

@@ -17,7 +17,7 @@ class WishlistPageContoller{
 
 
   GlobalKey<ScaffoldState> mobileDrawerKey = GlobalKey();
-  Widget content = SpinKitDualRing(color: Colors.white);
+  Widget content = SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3);
 
   Future<void> getProfile(String username,Function(dynamic) update) {
       // Call the user's CollectionReference to add a new user

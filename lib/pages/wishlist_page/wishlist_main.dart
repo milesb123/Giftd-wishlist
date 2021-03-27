@@ -63,16 +63,8 @@ class WishlistPageState extends State<WishlistPage> {
           key: controller.mobileDrawerKey,
           backgroundColor: Colors.white,
           body: mobileStructure(),
-          drawer:
-          Container(
-            width:200,
-            child: 
-            Drawer(
-              elevation: 5,
-              child: SizedBox.expand(child:Container(color:Colors.white))
-            ),
-          ),
-          drawerScrimColor: Colors.black45.withOpacity(0.1)
+          drawer:DynamicAppBar.mobileDrawerContent(),
+          drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }
     });
@@ -225,7 +217,14 @@ class WishlistContent extends StatelessWidget{
             SizedBox(height:20),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Align(alignment: Alignment.centerLeft,child:Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor))),
+              child: 
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+                  Icon(Icons.add,color: wishlist.theme.accentColor,size: 25)
+                ],
+              ),
             ),
             SizedBox(height:25),
             itemList(),
@@ -265,7 +264,7 @@ class WishlistContent extends StatelessWidget{
       children.add(SizedBox(height:20));
     }
 
-    return Column(children: children);
+    return Column(mainAxisAlignment: MainAxisAlignment.start,children: children);
   }
 
   Widget listItemView(WishlistItem item, int index){
@@ -353,7 +352,22 @@ class WishlistContent extends StatelessWidget{
     }
 
     children.addAll([
-      SizedBox(height:10),
+        SizedBox(height:20),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(Icons.delete,size:20,color: wishlist.theme.accentColor),
+              Icon(Icons.edit,size:20,color: wishlist.theme.accentColor)
+            ]
+            ),
+        )
+      ]
+    );
+
+    children.addAll([
+      SizedBox(height:20),
       Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
         child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
@@ -391,15 +405,44 @@ class WishlistContent extends StatelessWidget{
           Text(profile.nickname,textAlign: TextAlign.center,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
           SizedBox(height:5),
           Text(profile.bio,textAlign: TextAlign.center,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
-          SizedBox(height:16),
-          OutlinedButton(
-            onPressed: () => {Clipboard.setData(new ClipboardData(text: "https://giftd-wishlist.vercel.app/#/"+profile.username))},
-            child: 
-            Padding(
-              padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-              child: Text("Copy Link 🌍",style: TextStyle(fontSize:14))
-            ),
-            style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+          SizedBox(height:18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              OutlinedButton(
+                onPressed: () => {Clipboard.setData(new ClipboardData(text: "https://giftd-wishlist.vercel.app/#/"+profile.username))},
+                child: 
+                Padding(
+                  padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                  child: 
+                  Row(
+                    children: [
+                      Text("Copy Link",style: TextStyle(fontSize:14)),
+                      SizedBox(width:5),
+                      Icon(Icons.link,size: 14,),
+                    ],
+                  )
+                ),
+                style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+              ),
+              SizedBox(width:20),
+              OutlinedButton(
+                onPressed: () => {},
+                child: 
+                Padding(
+                  padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                  child: 
+                  Row(
+                    children: [
+                      Text("Edit Profile",style: TextStyle(fontSize:14)),
+                      SizedBox(width:5),
+                      Icon(Icons.edit,size: 14,),
+                    ],
+                  )
+                ),
+                style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+              ),
+            ],
           )
         ]
       ),
