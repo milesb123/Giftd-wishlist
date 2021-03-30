@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:responsive_web/Models/profile.dart';
 import 'package:responsive_web/Models/wishlist.dart';
 import 'package:responsive_web/helper/helper.dart';
-import 'package:responsive_web/pages/navbar/dynamic_navbar.dart';
-import 'package:responsive_web/pages/wishlist_page/wishlist_controller.dart';
+import 'package:responsive_web/widgets/navbar/dynamic_navbar.dart';
+import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //USE CASE
@@ -63,7 +63,7 @@ class WishlistPageState extends State<WishlistPage> {
           key: controller.mobileDrawerKey,
           backgroundColor: Colors.white,
           body: mobileStructure(),
-          drawer:DynamicAppBar.mobileDrawerContent(),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(),
           drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }
@@ -157,7 +157,7 @@ class WishlistPageState extends State<WishlistPage> {
           )
         )
       ),
-      DynamicAppBar(getTheme()).desktopNavBar(),
+      WishlistDynamicAppBar(getTheme()).desktopNavBar(),
     ]);
   }
 
@@ -165,7 +165,7 @@ class WishlistPageState extends State<WishlistPage> {
     return
     Column(
       children: [
-        DynamicAppBar(getTheme()).mobileNavBar(controller),
+        WishlistDynamicAppBar(getTheme()).mobileNavBar(controller),
         Container(height:1,color: getTheme().accentColor),
         Expanded(
           child: 

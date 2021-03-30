@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:responsive_web/fluro_router.dart';
-import 'package:responsive_web/pages/home_page.dart';
-import 'package:responsive_web/pages/wishlist_page/wishlist_main.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

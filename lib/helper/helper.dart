@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 
 class HelperStyles{
-  static ButtonStyle defaultButtonStyle([bool outlined,Color color]){
+  static ButtonStyle defaultButtonStyle([bool outlined,Color color,Color fill,Color textColor]){
     color ??=Colors.white;
+    fill ??=Colors.transparent;
+    textColor ??= color;
     if(outlined){
       return
       ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+          return fill;
+        }),
         foregroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-          Color _textColor;
+          Color _textColor = textColor;
 
           if (states.contains(MaterialState.disabled)) {
             _textColor = Colors.grey;
           } else if (states.contains(MaterialState.pressed)) {
-            _textColor = color.withOpacity(0.5);
-          } else {
-            _textColor = color;
+            _textColor = _textColor.withOpacity(0.5);
           }
+          
           return _textColor;
         }),
         side: MaterialStateProperty.resolveWith((states) {

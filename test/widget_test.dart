@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:responsive_web/pages/wishlist_page/wishlist_main.dart';
+import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

@@ -1,7 +1,9 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/widgets.dart' as widgetPackage;
-import 'package:responsive_web/pages/home_page.dart';
-import 'package:responsive_web/pages/wishlist_page/wishlist_main.dart';
+import 'package:responsive_web/widgets/pages/home_page.dart';
+import 'package:responsive_web/widgets/pages/signin_page.dart';
+import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_main.dart';
+
 
 class RouteManager{
   static FluroRouter router = FluroRouter();
@@ -21,11 +23,17 @@ class RouteManager{
       else{
         return WishlistPage(username);
       }
+  });
 
-    });
+  static Handler _signinHandler = Handler(handlerFunc: (widgetPackage.BuildContext context, Map<String, dynamic> params,){
+     return SigninPage();
+  });
   
   static void setupRouter() {
     router.define("/", handler: _homeHandler,transitionType: TransitionType.none);
+    router.define("signin", handler: _signinHandler,transitionType: TransitionType.none);
     router.define("/:username", handler: _homeHandler,transitionType: TransitionType.none);
+
   }
 }
+
