@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_web/helper/helper.dart';
-import 'package:responsive_web/models/wishlist.dart';
 import 'package:responsive_web/widgets/navbar/dynamic_navbar.dart';
 
 class SigninPage extends StatefulWidget{

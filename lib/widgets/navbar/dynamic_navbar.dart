@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:responsive_web/Models/wishlist.dart';
+import 'package:responsive_web/models/wishlist.dart';
 import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_controller.dart';
 
