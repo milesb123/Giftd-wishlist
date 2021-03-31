@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:responsive_web/objects/profile.dart';
-import 'package:responsive_web/objects/wishlist.dart';
+import 'package:responsive_web/models/profile.dart';
+import 'package:responsive_web/models/wishlist.dart';
 
 class WishlistPageContoller{
   
