@@ -20,7 +20,7 @@ import 'package:url_launcher/url_launcher.dart';
 //BUGS:
 // - text must find new line
 
-class WishlistPage extends StatefulWidget {
+class WishlistPage extends StatefulWidget { 
 
   final String name;
 
