@@ -53,7 +53,7 @@ class WishlistPageState extends State<WishlistPage> {
       if(constraints.maxWidth > 600){
         return
         Scaffold(
-          backgroundColor: Color.fromRGBO(30, 30, 30, 1),
+          backgroundColor: Color.fromRGBO(240, 240, 240, 1),
           body: desktopStructure()
         );
       }

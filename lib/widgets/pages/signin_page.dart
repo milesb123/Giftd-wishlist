@@ -115,6 +115,10 @@ class SigninPageState extends State<SigninPage>{
 class SigninContent extends StatelessWidget{
 
   String _username;
+  String _password;
+
+  String errorMessage = ""; //"This username or password is invalid";
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -123,23 +127,37 @@ class SigninContent extends StatelessWidget{
     Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("Sign In to Giftd",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
+          Text("Sign In",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
           Form(
+            key:_formKey,
             child: 
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height:40),
+                Text("Username",style: TextStyle(fontSize: 16,color: Colors.white)),
                 _buildUsername(),
                 SizedBox(height:40),
+                Text("Password",style: TextStyle(fontSize: 16,color: Colors.white)),
                 _buildPassword(),
-                SizedBox(height:80),
+                SizedBox(height:20),
+                Text(errorMessage,style: TextStyle(fontSize: 14,color: Colors.red)),
+                SizedBox(height: 60),
                 Center(
                   child: 
                   ConstrainedBox(
                     constraints: BoxConstraints.tightFor(width:double.infinity),
                     child: OutlinedButton(
-                      onPressed: ()=>{},
+                      onPressed: (){
+                        if(!_formKey.currentState.validate()){
+                          return;
+                        }
+                        _formKey.currentState.save();
+                        
+                        //Execute some function, show loading icon
+                        print(_username);
+                        print(_password);
+                      },
                       child: 
                       Padding(
                         padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -155,7 +173,9 @@ class SigninContent extends StatelessWidget{
                   ConstrainedBox(
                     constraints: BoxConstraints.tightFor(width:double.infinity),
                     child: OutlinedButton(
-                      onPressed: ()=>{},
+                      onPressed: (){
+                        
+                      },
                       child: 
                       Padding(
                         padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -165,6 +185,8 @@ class SigninContent extends StatelessWidget{
                     ),
                   ),
                 ),
+                SizedBox(height:20),
+                Center(child: TextButton(style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){print("clicked");}, child: Text("Forgot Password? Reset it here",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))))
               ],
             )
           )
@@ -188,10 +210,10 @@ class SigninContent extends StatelessWidget{
         if(value.isEmpty){
           return 'Username is required';
         }
+        return null;
       },
       onSaved: (String value){
         _username = value;
-
       },
     );
   }
@@ -199,6 +221,7 @@ class SigninContent extends StatelessWidget{
   Widget _buildPassword(){
     return TextFormField(
       style: TextStyle(color:Colors.white),
+      keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
         hintText: 'Password',
         hintStyle: TextStyle(color:Colors.grey),
@@ -210,11 +233,11 @@ class SigninContent extends StatelessWidget{
       ),
       validator:(String value){
         if(value.isEmpty){
-          return 'Username is required';
+          return 'Password is required';
         }
       },
       onSaved: (String value){
-        _username = value;
+        _password = value;
 
       },
     );
