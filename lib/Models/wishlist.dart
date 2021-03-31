@@ -57,7 +57,7 @@ class WishlistTheme{
 
   //Linear Gradient init
   WishlistTheme linearGradientInit(Color accentColor, List<Color>gradientColors, Color navColor){
-    type = "lGradient";
+    type = "lGradient"; 
     this.accentColor = accentColor;
     this.background = 
     SizedBox.expand(
