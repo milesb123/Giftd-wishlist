@@ -12,7 +12,7 @@ import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(WishlistPage("milesb"));
+    await tester.pumpWidget(Text("a"));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

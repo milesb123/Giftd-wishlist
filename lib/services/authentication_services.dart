@@ -1,0 +1,58 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
+class AuthenticationService{
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  bool signedIn;
+  
+  AuthenticationService(){
+    listen();
+  }
+
+  void listen(){
+    auth
+    .authStateChanges()
+    .listen((User user) {
+      if (user == null) {
+        //signedIn = false;
+      }
+      else {
+       // signedIn = true;
+      }
+    });
+  }
+
+  bool userSignedIn(){
+    print(auth.currentUser != null);
+    return auth.currentUser != null;
+  }
+
+  Future<String> signIn(String email,String password, Function(String) displayMessage) async {
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password
+      );
+      
+      if(userCredential.user.emailVerified){
+        return userCredential.user.uid;
+      }
+      else{
+        //TODO: Navigate to email verification page
+        //displayMessage('Please verify your email to sign in');
+        return userCredential.user.uid;
+      }
+
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        displayMessage('No user exists for this email');
+      }
+      else{
+        displayMessage('The username or password is invalid');
+      }
+    }
+    return null;
+  }
+}

@@ -11,33 +11,25 @@ import 'package:responsive_web/widgets/navbar/dynamic_navbar.dart';
 import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-//USE CASE
-// Wishlist and User objects will be flowed from the top down, by reference
-
-//TODO:
-// - Routing
-
-//BUGS:
-// - text must find new line
-
 class WishlistPage extends StatefulWidget { 
 
-  final String name;
+  WishlistPageContoller controller;// = WishlistPageContoller("bad_gy4");
 
-  WishlistPage([this.name]);
+  WishlistPage(String username){
+    this.controller = WishlistPageContoller(username);
+  }
+
+  static WishlistPage content(String username){
+    return WishlistPage(username);
+  }
 
   @override
-  WishlistPageState createState() => WishlistPageState(name);
+  WishlistPageState createState() => WishlistPageState();
 }
 
 class WishlistPageState extends State<WishlistPage> {
   
-  var controller = new WishlistPageContoller();
   var defaultTheme = new WishlistTheme().solidInit(Colors.white, Colors.black);
-
-  WishlistPageState(String name){
-    configureController(name);
-  }
 
   Widget build(BuildContext context) {
     return getScaffold(context);
@@ -50,7 +42,7 @@ class WishlistPageState extends State<WishlistPage> {
     //On Successful load
     return
     LayoutBuilder(builder: (context,constraints){
-      if(constraints.maxWidth > 600){
+      if(constraints.maxWidth > 700){
         return
         Scaffold(
           backgroundColor: Color.fromRGBO(240, 240, 240, 1),
@@ -60,7 +52,7 @@ class WishlistPageState extends State<WishlistPage> {
       else{
         return
         Scaffold(
-          key: controller.mobileDrawerKey,
+          key: widget.controller.mobileDrawerKey,
           backgroundColor: Colors.white,
           body: mobileStructure(),
           drawer:WishlistDynamicAppBar.mobileDrawerContent(),
@@ -70,53 +62,28 @@ class WishlistPageState extends State<WishlistPage> {
     });
   }
 
+
+/*
   void configureController(String name){
-    if(controller.currentProfile == null){
-      controller.getProfile(name,(error){
+    print(name);
+    if(widget.controller.currentProfile == null){
+      widget.controller.getWishlistProfile(name, (error){
         if(error == null){
           //Successful
-          //configureControllerWishlist(controller.currentProfile);
-          print("Succeeded");
-          controller.content = WishlistContent(controller.currentProfile,controller.wishlist);
-          setState(() {});
+          setState(() {widget.controller.content = WishlistContent(widget.controller.currentProfile,widget.controller.wishlist);});
         }
         else{
           //Unsuccessful: No Profile
-          print(error);
-          controller.content = failureView();
-          setState(() {});
+          setState(() {controller.content = failureView();});
         }
       });
-      //Load Profile
     }
     else{
-      //Get Profile
-      //configureControllerWishlist(controller.currentProfile);
-      controller.content = WishlistContent(controller.currentProfile,controller.wishlist);
-    }
-    //On success -> set controller profile and wishlist ,set content widget, update view
-    //On failure -> set content widget, update view
-
-    //NOTE: Load list will run one run once unless the page is refreshed and controller is reset
-  }
-
-  void configureControllerWishlist(Profile currentProfile){
-    //Profile exists
-    if(controller.wishlist == null){
-      //Load wishlist
-      if(true){
-        //Successful
-      }
-      else{
-        //Unsuccessful: No Wishlist
-        controller.content = failureView();
-      }
-    }
-    else{
-      //Get cached wishlist
+      
       controller.content = WishlistContent(controller.currentProfile,controller.wishlist);
     }
   }
+*/
 
   Widget failureView(){
     return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
@@ -134,7 +101,7 @@ class WishlistPageState extends State<WishlistPage> {
           child:
           Center(child:
             ConstrainedBox(
-              constraints: BoxConstraints.tightFor(width:600),
+              constraints: BoxConstraints.tightFor(width:700),
               child:
               Stack(
                 children:[
@@ -146,7 +113,7 @@ class WishlistPageState extends State<WishlistPage> {
                         Padding(
                             //Top padding navbar height
                             padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
-                            child: controller.content,
+                            child: widget.controller.content,
                         ),
                       ]
                     )
@@ -165,7 +132,7 @@ class WishlistPageState extends State<WishlistPage> {
     return
     Column(
       children: [
-        WishlistDynamicAppBar(getTheme()).mobileNavBar(controller),
+        WishlistDynamicAppBar(getTheme()).mobileNavBar(widget.controller),
         Container(height:1,color: getTheme().accentColor),
         Expanded(
           child: 
@@ -177,7 +144,7 @@ class WishlistPageState extends State<WishlistPage> {
                 ListView(children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: controller.content,
+                    child: widget.controller.content,
                   )
                   ]
                 ),
@@ -190,7 +157,7 @@ class WishlistPageState extends State<WishlistPage> {
   }
 
   WishlistTheme getTheme(){
-    return controller.wishlist == null ? defaultTheme : controller.wishlist.theme;
+    return widget.controller.wishlist == null ? defaultTheme : widget.controller.wishlist.theme;
   }
 
 }

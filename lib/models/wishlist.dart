@@ -6,7 +6,8 @@ class Wishlist{
   var items = <WishlistItem>[];
   var theme;
 
-  Wishlist(String owner, List<WishlistItem> items,WishlistTheme theme)  {
+  Wishlist(String listID,String owner, List<WishlistItem> items,WishlistTheme theme)  {
+    this.listID = listID;
     this.ownerID = owner;
     this.items = items;
     this.theme = theme;

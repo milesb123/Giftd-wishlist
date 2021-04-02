@@ -22,8 +22,10 @@ environment:
 
 dependencies:
   url_launcher: ^5.7.10
+  get_it: ^1.0.3
   flutter_spinkit: "^4.1.2"
-  firebase_core: "0.7.0"
+  firebase_core: "^0.7.0"
+  firebase_auth: "^0.20.1"
   cloud_firestore: "^0.16.0+1"
   fluro: 2.0.3
   flutter:

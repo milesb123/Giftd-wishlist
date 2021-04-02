@@ -1,7 +1,8 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/widgets.dart' as widgetPackage;
 import 'package:responsive_web/widgets/pages/home_page.dart';
-import 'package:responsive_web/widgets/pages/signin_page.dart';
+import 'package:responsive_web/widgets/pages/signin_page/signin_page.dart';
+import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_controller.dart';
 import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_main.dart';
 
 
@@ -21,7 +22,7 @@ class RouteManager{
         return HomePage();
       }
       else{
-        return WishlistPage(username);
+        return WishlistPage.content(username);
       }
   });
 

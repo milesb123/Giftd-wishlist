@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/widgets/navbar/dynamic_navbar.dart';
+import 'package:responsive_web/widgets/pages/signin_page/signin_controller.dart';
+
 
 class SigninPage extends StatefulWidget{
-
-  @override
   SigninPageState createState() => SigninPageState();
-
 }
 
 class SigninPageState extends State<SigninPage>{
@@ -112,93 +112,111 @@ class SigninPageState extends State<SigninPage>{
 
 }
 
-class SigninContent extends StatelessWidget{
+class SigninContent extends StatefulWidget{
 
-  String _username;
-  String _password;
+  SigninController controller = SigninController();
 
-  String errorMessage = ""; //"This username or password is invalid";
+  SigninContentState createState() => SigninContentState();
+
+}
+
+class SigninContentState extends State<SigninContent>{
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context){
-    return
-    Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text("Sign In",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
-          Form(
-            key:_formKey,
-            child: 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height:40),
-                Text("Username",style: TextStyle(fontSize: 16,color: Colors.white)),
-                _buildUsername(),
-                SizedBox(height:40),
-                Text("Password",style: TextStyle(fontSize: 16,color: Colors.white)),
-                _buildPassword(),
-                SizedBox(height:20),
-                Text(errorMessage,style: TextStyle(fontSize: 14,color: Colors.red)),
-                SizedBox(height: 60),
-                Center(
-                  child: 
-                  ConstrainedBox(
-                    constraints: BoxConstraints.tightFor(width:double.infinity),
-                    child: OutlinedButton(
-                      onPressed: (){
-                        if(!_formKey.currentState.validate()){
-                          return;
-                        }
-                        _formKey.currentState.save();
-                        
-                        //Execute some function, show loading icon
-                        print(_username);
-                        print(_password);
-                      },
-                      child: 
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                        child: Text("Sign In",style: TextStyle(fontSize:20))
-                      ),
-                      style: HelperStyles.defaultButtonStyle(true,Colors.white,Colors.white,Colors.black),
-                    ),
-                  ),
-                ),
-                SizedBox(height:20),
-                Center(
-                  child: 
-                  ConstrainedBox(
-                    constraints: BoxConstraints.tightFor(width:double.infinity),
-                    child: OutlinedButton(
-                      onPressed: (){
-                        
-                      },
-                      child: 
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
-                        child: Text("Sign Up",style: TextStyle(fontSize:20))
-                      ),
-                      style: HelperStyles.defaultButtonStyle(true,Colors.white),
-                    ),
-                  ),
-                ),
-                SizedBox(height:20),
-                Center(child: TextButton(style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){print("clicked");}, child: Text("Forgot Password? Reset it here",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))))
-              ],
-            )
-          )
-        ],
-      );
+
+    return widget.controller.loading ? _buildLoadingCircle() : _buildContent();
   }
 
-    Widget _buildUsername(){
+  Widget _buildLoadingCircle(){
+    return Align(alignment: Alignment.center,child: SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3));
+  }
+
+  Widget _buildContent(){
+    return
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text("Sign In 🎁",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
+        Form(
+          key:_formKey,
+          child: 
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height:40),
+              Text("Email",style: TextStyle(fontSize: 16,color: Colors.white)),
+              _buildEmail(),
+              SizedBox(height:40),
+              Text("Password",style: TextStyle(fontSize: 16,color: Colors.white)),
+              _buildPassword(),
+              SizedBox(height:20),
+              Text(widget.controller.errorMessage,style: TextStyle(fontSize: 14,color: Colors.red)),
+              SizedBox(height: 60),
+              Center(
+                child: 
+                ConstrainedBox(
+                  constraints: BoxConstraints.tightFor(width:double.infinity),
+                  child: OutlinedButton(
+                    onPressed: (){
+                      setState(() {
+                        widget.controller.errorMessage = "";
+                      });
+
+                      if(!_formKey.currentState.validate()){
+                        return;
+                      }
+                      _formKey.currentState.save();
+
+                      setState(() {
+                        widget.controller.loading = true;
+                      });
+                      widget.controller.signIn(widget.controller.email, widget.controller.password, setState, context, _formKey);
+                    },
+                    child: 
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+                      child: Text("Sign In",style: TextStyle(fontSize:20))
+                    ),
+                    style: HelperStyles.defaultButtonStyle(true,Colors.white,Colors.white,Colors.black),
+                  ),
+                ),
+              ),
+              SizedBox(height:20),
+              Center(
+                child: 
+                ConstrainedBox(
+                  constraints: BoxConstraints.tightFor(width:double.infinity),
+                  child: OutlinedButton(
+                    onPressed: (){
+                      
+                    },
+                    child: 
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
+                      child: Text("Sign Up",style: TextStyle(fontSize:20))
+                    ),
+                    style: HelperStyles.defaultButtonStyle(true,Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(height:20),
+              Center(child: TextButton(style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){print("clicked");}, child: Text("Forgot Password? Reset it here",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))))
+            ],
+          )
+        )
+      ],
+    );
+  }
+
+  Widget _buildEmail(){
     return TextFormField(
       style: TextStyle(color:Colors.white),
+      keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        hintText: 'Username',
+        hintText: 'Email',
         hintStyle: TextStyle(color:Colors.grey),
         border: UnderlineInputBorder(),
           enabledBorder: const UnderlineInputBorder(
@@ -213,7 +231,7 @@ class SigninContent extends StatelessWidget{
         return null;
       },
       onSaved: (String value){
-        _username = value;
+        widget.controller.email = value;
       },
     );
   }
@@ -237,9 +255,9 @@ class SigninContent extends StatelessWidget{
         }
       },
       onSaved: (String value){
-        _password = value;
-
+        widget.controller.password = value;
       },
+      obscureText: true,
     );
   }
 
