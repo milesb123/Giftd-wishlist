@@ -8,6 +8,7 @@ import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/models/profile.dart';
 import 'package:responsive_web/models/wishlist.dart';
 import 'package:responsive_web/services/authentication_services.dart';
+import 'package:responsive_web/services/profile_services.dart';
 import 'package:responsive_web/services/service_manager.dart';
 import 'package:responsive_web/widgets/navbar/dynamic_navbar.dart';
 import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_controller.dart';
@@ -146,8 +147,9 @@ class WishlistContent extends StatelessWidget{
 
   final Profile profile;
   final Wishlist wishlist;
-  
+
   var authService = locator<AuthenticationService>();
+  var profileService = locator<ProfileService>();
 
   WishlistContent(this.profile,this.wishlist);
 
@@ -185,29 +187,110 @@ class WishlistContent extends StatelessWidget{
             SizedBox(height:60),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Column(
-                children:[
-                  Text("Inspired? Make your own wishlist!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
-                  SizedBox(height:20),
-                  OutlinedButton(
-                    onPressed: ()=>{},
-                    child: 
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                      child: Text("Sign Up 🎁",style: TextStyle(fontSize:14))
-                    ),
-                    style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
-                  ),
-                  SizedBox(height:20),
-                  Text("You can sign up with Twitter, Instagram and more",textAlign: TextAlign.center,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
-                ]
-              ),
+              child: 
+              actionPromptBox(context),
             ),
             SizedBox(height:100),
           ],
         )
       )
     );
+  }
+
+  Widget actionPromptBox(BuildContext context){
+    if(authService.userSignedIn()){
+      if(authService.userIsLocalUser(profile.authID)){
+        return
+        Column(
+          children:[
+            Text("Shoes in exactly my size? No way!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+            SizedBox(height:20),
+            OutlinedButton(
+              onPressed: ()=>{},
+              child: 
+              Padding(
+                padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Share",style: TextStyle(fontSize:14)),
+                    SizedBox(width:5),
+                    Icon(Icons.share),
+                  ],
+                )
+              ),
+              style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+            ),
+            SizedBox(height:20),
+            Text("Start recieving gifts by sharing with your friends and followers",textAlign: TextAlign.center,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+          ]
+        );
+      }
+      else{
+        return
+        Column(
+          children:[
+            Text("Inspired? Edit your own wishlist!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+            SizedBox(height:20),
+            OutlinedButton(
+              onPressed: ()=>{},
+              child: 
+              Padding(
+                padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                child:
+                OutlinedButton(
+                  onPressed: (){
+                    profileService.getProfileForUID(authService.auth.currentUser.uid)
+                    .then((value){
+                      if(value != null){
+                        Navigator.pushReplacementNamed(context, '/${value.username}');
+                      }
+                    });
+                  },
+                  child: 
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    child: 
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.person),
+                        SizedBox(width:5),
+                        Text("Profile",style: TextStyle(fontSize:14)),
+                      ],
+                    )
+                  ),
+                  style: HelperStyles.defaultButtonStyle(true,Colors.white),
+                )
+              ),
+              style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+            ),
+            SizedBox(height:20)
+          ]
+        );
+      }
+    }
+    else{
+      return
+      Column(
+        children:[
+          Text("Inspired? Make your own wishlist!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+          SizedBox(height:20),
+          OutlinedButton(
+            onPressed: ()=>{},
+            child: 
+            Padding(
+              padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+              child: Text("Sign Up 🎁",style: TextStyle(fontSize:14))
+            ),
+            style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+          ),
+          SizedBox(height:20),
+          Text("You can sign up with Twitter, Instagram and more",textAlign: TextAlign.center,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+        ]
+      );
+    }
+
   }
 
   Widget itemList(){

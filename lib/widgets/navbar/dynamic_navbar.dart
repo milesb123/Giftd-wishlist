@@ -267,7 +267,12 @@ class NavbarComponents{
         children:[
           OutlinedButton(
             onPressed: (){
-              Navigator.pushReplacementNamed(context, '/bad_gy4l');
+              profileService.getProfileForUID(authService.auth.currentUser.uid)
+              .then((value){
+                if(value != null){
+                  Navigator.pushReplacementNamed(context, '/${value.username}');
+                }
+              });
             },
             child: 
             Padding(
