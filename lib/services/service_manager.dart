@@ -7,7 +7,7 @@ import 'package:responsive_web/services/wishlist_services.dart';
 GetIt locator = GetIt();
 
 void setupLocator() {
-  locator.registerSingleton(AuthenticationService());
   locator.registerSingleton(ProfileService());
   locator.registerSingleton(WishlistService());
+  locator.registerSingleton(AuthenticationService());
 }

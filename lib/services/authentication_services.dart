@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class AuthenticationService{
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -6,6 +7,7 @@ class AuthenticationService{
   bool signedIn;
   
   AuthenticationService(){
+    FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
     listen();
   }
 

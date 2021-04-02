@@ -1,8 +1,11 @@
 
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/models/wishlist.dart';
 import 'package:responsive_web/services/authentication_services.dart';
+import 'package:responsive_web/services/profile_services.dart';
 import 'package:responsive_web/services/service_manager.dart';
 import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_controller.dart';
 
@@ -81,7 +84,7 @@ class DynamicAppBar{
     );
   }
 
-  Widget desktopNavBar(){
+  Widget desktopNavBar(BuildContext context){
     return
     Container(
       //height:80,
@@ -103,7 +106,7 @@ class DynamicAppBar{
               child:
               Image.asset("assets/images/logo_capsule.png",height:50)
             ),
-            NavbarComponents.desktopNavButtonRow(authService.userSignedIn())
+            NavbarComponents().desktopNavButtonRow(authService.userSignedIn(),context)
           ]
         ),
       ),
@@ -193,7 +196,7 @@ class WishlistDynamicAppBar{
     );
   }
 
-  Widget desktopNavBar(){
+  Widget desktopNavBar(BuildContext context){
     return
     Container(
       //height:80,
@@ -216,7 +219,7 @@ class WishlistDynamicAppBar{
               child:
               Image.asset("assets/images/logo_capsule.png",height:50)
             ),
-            NavbarComponents.desktopNavButtonRow(authService.userSignedIn())
+            NavbarComponents().desktopNavButtonRow(authService.userSignedIn(),context)
           ]
         ),
       ),
@@ -226,13 +229,17 @@ class WishlistDynamicAppBar{
 
 class NavbarComponents{
 
-  static Widget desktopNavButtonRow(bool signedIn){
+  var profileService = locator<ProfileService>();
+
+  Widget desktopNavButtonRow(bool signedIn,BuildContext context){
     if(signedIn){
       return
       Row(
         children:[
           OutlinedButton(
-            onPressed: ()=>{},
+            onPressed: (){
+              Navigator.pushReplacementNamed(context, '/bad_gy4l');
+            },
             child: 
             Padding(
               padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -254,7 +261,9 @@ class NavbarComponents{
       Row(
         children:[
           OutlinedButton(
-            onPressed: ()=>{},
+            onPressed: (){
+              Navigator.pushReplacementNamed(context, '/signin');
+            },
             child: 
             Padding(
               padding: EdgeInsets.fromLTRB(12, 10, 12, 10),

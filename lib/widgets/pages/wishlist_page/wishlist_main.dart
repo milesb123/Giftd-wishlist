@@ -46,7 +46,7 @@ class WishlistPageState extends State<WishlistPage> {
         return
         Scaffold(
           backgroundColor: Color.fromRGBO(240, 240, 240, 1),
-          body: desktopStructure()
+          body: desktopStructure(context)
         );
       }
       else{
@@ -89,7 +89,7 @@ class WishlistPageState extends State<WishlistPage> {
     return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
   }
 
-  Widget desktopStructure(){
+  Widget desktopStructure(BuildContext context){
     return
     Stack(
       children: [
@@ -124,7 +124,7 @@ class WishlistPageState extends State<WishlistPage> {
           )
         )
       ),
-      WishlistDynamicAppBar(getTheme()).desktopNavBar(),
+      WishlistDynamicAppBar(getTheme()).desktopNavBar(context),
     ]);
   }
 
