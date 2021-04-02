@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/models/profile.dart';
 import 'package:responsive_web/models/wishlist.dart';
+import 'package:responsive_web/services/authentication_services.dart';
+import 'package:responsive_web/services/service_manager.dart';
 import 'package:responsive_web/widgets/navbar/dynamic_navbar.dart';
 import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -61,29 +63,6 @@ class WishlistPageState extends State<WishlistPage> {
       }
     });
   }
-
-
-/*
-  void configureController(String name){
-    print(name);
-    if(widget.controller.currentProfile == null){
-      widget.controller.getWishlistProfile(name, (error){
-        if(error == null){
-          //Successful
-          setState(() {widget.controller.content = WishlistContent(widget.controller.currentProfile,widget.controller.wishlist);});
-        }
-        else{
-          //Unsuccessful: No Profile
-          setState(() {controller.content = failureView();});
-        }
-      });
-    }
-    else{
-      
-      controller.content = WishlistContent(controller.currentProfile,controller.wishlist);
-    }
-  }
-*/
 
   Widget failureView(){
     return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
@@ -168,9 +147,20 @@ class WishlistContent extends StatelessWidget{
   final Profile profile;
   final Wishlist wishlist;
 
+  var authService = locator<AuthenticationService>();
+
   WishlistContent(this.profile,this.wishlist);
 
   Widget build(BuildContext context) {
+
+    List<Widget> wishlistHeaderComponents = [];
+
+    wishlistHeaderComponents.add(Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)));
+    
+    
+    if(authService.userIsLocalUser(profile.authID)){
+      wishlistHeaderComponents.add(Icon(Icons.add,color: wishlist.theme.accentColor,size: 30));
+    }
 
     return
     SizedBox(
@@ -187,10 +177,7 @@ class WishlistContent extends StatelessWidget{
               child: 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
-                  Icon(Icons.add,color: wishlist.theme.accentColor,size: 30)
-                ],
+                children: wishlistHeaderComponents
               ),
             ),
             SizedBox(height:25),
@@ -318,20 +305,22 @@ class WishlistContent extends StatelessWidget{
       ]);
     }
 
-    children.addAll([
-        SizedBox(height:20),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(Icons.delete,size:20,color: wishlist.theme.accentColor),
-              Icon(Icons.edit,size:20,color: wishlist.theme.accentColor)
-            ]
-            ),
-        )
-      ]
-    );
+    if(authService.userIsLocalUser(profile.authID)){
+      children.addAll([
+          SizedBox(height:20),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.delete,size:20,color: wishlist.theme.accentColor),
+                Icon(Icons.edit,size:20,color: wishlist.theme.accentColor)
+              ]
+              ),
+          )
+        ]
+      );
+    }
 
     children.addAll([
       SizedBox(height:20),
@@ -349,6 +338,52 @@ class WishlistContent extends StatelessWidget{
   }
 
   Widget listHeader(){
+    
+    List<Widget> buttonList = [];
+
+    buttonList.add(
+      OutlinedButton(
+        onPressed: () => {Clipboard.setData(new ClipboardData(text: "https://giftd-wishlist.vercel.app/#/"+profile.username))},
+        child: 
+        Padding(
+          padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+          child: 
+          Row(
+            children: [
+              Text("Copy Link",style: TextStyle(fontSize:14)),
+              SizedBox(width:5),
+              Icon(Icons.link,size: 14,),
+            ],
+          )
+        ),
+        style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+      ),
+    );
+
+    if(authService.userIsLocalUser(profile.authID)){
+      buttonList.addAll(
+        [
+        SizedBox(width:20),
+        OutlinedButton(
+          onPressed: () => {},
+          child: 
+          Padding(
+            padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+            child: 
+            Row(
+              children: [
+                Text("Edit Profile",style: TextStyle(fontSize:14)),
+                SizedBox(width:5),
+                Icon(Icons.edit,size: 14,),
+              ],
+            )
+          ),
+          style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+        )
+        ]
+      );
+    }
+
     return
     Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -375,41 +410,7 @@ class WishlistContent extends StatelessWidget{
           SizedBox(height:18),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              OutlinedButton(
-                onPressed: () => {Clipboard.setData(new ClipboardData(text: "https://giftd-wishlist.vercel.app/#/"+profile.username))},
-                child: 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                  child: 
-                  Row(
-                    children: [
-                      Text("Copy Link",style: TextStyle(fontSize:14)),
-                      SizedBox(width:5),
-                      Icon(Icons.link,size: 14,),
-                    ],
-                  )
-                ),
-                style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
-              ),
-              SizedBox(width:20),
-              OutlinedButton(
-                onPressed: () => {},
-                child: 
-                Padding(
-                  padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                  child: 
-                  Row(
-                    children: [
-                      Text("Edit Profile",style: TextStyle(fontSize:14)),
-                      SizedBox(width:5),
-                      Icon(Icons.edit,size: 14,),
-                    ],
-                  )
-                ),
-                style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
-              ),
-            ],
+            children: buttonList
           )
         ]
       ),

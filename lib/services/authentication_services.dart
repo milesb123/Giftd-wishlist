@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:responsive_web/models/profile.dart';
 
 class AuthenticationService{
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -24,8 +25,11 @@ class AuthenticationService{
     });
   }
 
+  bool userIsLocalUser(String uid){
+    return userSignedIn() && uid != null && auth.currentUser.uid == uid;
+  }
+
   bool userSignedIn(){
-    print(auth.currentUser != null);
     return auth.currentUser != null;
   }
 

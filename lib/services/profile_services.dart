@@ -17,12 +17,12 @@ class ProfileService{
           QueryDocumentSnapshot doc = snapshot.docs[0];
           //Create profile from data
           String userID = doc.id;
+          String authID = doc.data()['auth_id'];
           String imageURL = doc.data()['imageURL'];
           String nickname = doc.data()['nickname'];
-          String username = doc.data()['username'];
           String bio = doc.data()['bio'];
 
-          if(userID == null || username == null){
+          if(userID == null || authID == null){
             //Return error if fields missing
             error("Missing Required Fields");
             return null;
@@ -30,6 +30,7 @@ class ProfileService{
           else{
             //Build Profile
             var profile = new Profile(
+              authID,
               userID,
               imageURL == null ? "http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png" : imageURL.toString(),
               nickname == null ? username : nickname.toString(),
@@ -75,6 +76,7 @@ class ProfileService{
               else{
                 //Build Profile
                 var profile = new Profile(
+                  uid,
                   userID,
                   imageURL == null ? "http://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png" : imageURL.toString(),
                   nickname == null ? username : nickname.toString(),
