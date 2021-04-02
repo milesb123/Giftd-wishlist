@@ -1,5 +1,6 @@
 import 'dart:js';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/models/wishlist.dart';
@@ -105,7 +106,20 @@ class DynamicAppBar{
               child:
               Image.asset("assets/images/logo_capsule.png",height:50)
             ),
-            NavbarComponents().desktopNavButtonRow(authService.userSignedIn(),context)
+            StreamBuilder(
+                stream:authService.authStream,
+                initialData: authService.auth.currentUser,
+                builder:(context,snapshot){
+                  var components = NavbarComponents();
+                  User user = snapshot.data;
+                  if(user != null){
+                    return components.desktopNavButtonRow(true, context);
+                  }
+                  else{
+                    return components.desktopNavButtonRow(false, context);
+                  }
+                }
+              )
           ]
         ),
       ),
@@ -196,6 +210,7 @@ class WishlistDynamicAppBar{
   }
 
   Widget desktopNavBar(BuildContext context){
+    print("Rebuilt");
     return
     Container(
       //height:80,
@@ -218,7 +233,20 @@ class WishlistDynamicAppBar{
               child:
               Image.asset("assets/images/logo_capsule.png",height:50)
             ),
-            NavbarComponents().desktopNavButtonRow(authService.userSignedIn(),context)
+            StreamBuilder(
+              stream:authService.authStream,
+              initialData: authService.auth.currentUser,
+              builder:(context,snapshot){
+                var components = NavbarComponents();
+                User user = snapshot.data;
+                if(user != null){
+                  return components.desktopNavButtonRow(true, context);
+                }
+                else{
+                  return components.desktopNavButtonRow(false, context);
+                }
+              }
+            )
           ]
         ),
       ),
@@ -228,9 +256,11 @@ class WishlistDynamicAppBar{
 
 class NavbarComponents{
 
+  var authService = locator<AuthenticationService>();
   var profileService = locator<ProfileService>();
 
   Widget desktopNavButtonRow(bool signedIn,BuildContext context){
+    print(["signedIn",signedIn]);
     if(signedIn){
       return
       Row(
@@ -251,7 +281,7 @@ class NavbarComponents{
               )
             ),
             style: HelperStyles.defaultButtonStyle(true,Colors.white),
-          ),
+          )
         ]
       );
     }

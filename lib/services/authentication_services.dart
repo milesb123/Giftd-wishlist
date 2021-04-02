@@ -1,28 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:responsive_web/models/profile.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
+
 
 class AuthenticationService{
   FirebaseAuth auth = FirebaseAuth.instance;
-
-  bool signedIn;
+  Stream<User> authStream = FirebaseAuth.instance.authStateChanges();
   
   AuthenticationService(){
     FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
-    listen();
-  }
-
-  void listen(){
-    auth
-    .authStateChanges()
-    .listen((User user) {
-      if (user == null) {
-        //signedIn = false;
-      }
-      else {
-       // signedIn = true;
-      }
-    });
   }
 
   bool userIsLocalUser(String uid){
@@ -33,6 +19,10 @@ class AuthenticationService{
     return auth.currentUser != null;
   }
 
+  void signOut(){
+    auth.signOut();
+  }
+
   Future<String> signIn(String email,String password, Function(String) displayMessage) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
@@ -41,6 +31,7 @@ class AuthenticationService{
       );
       
       if(userCredential.user.emailVerified){
+        //Persist user credential uid        
         return userCredential.user.uid;
       }
       else{

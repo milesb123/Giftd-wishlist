@@ -13,10 +13,6 @@ class SigninController{
 
   String errorMessage = ""; //"This username or password is invalid";
   bool loading = false;
-
-  SigninController(){
-    print("Created");
-  }
   
   void signIn(String email,String password,Function(void Function() f) setState,dynamic context,GlobalKey<FormState> formKey){
     

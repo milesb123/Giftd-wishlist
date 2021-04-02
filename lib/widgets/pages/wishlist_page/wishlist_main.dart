@@ -146,7 +146,7 @@ class WishlistContent extends StatelessWidget{
 
   final Profile profile;
   final Wishlist wishlist;
-
+  
   var authService = locator<AuthenticationService>();
 
   WishlistContent(this.profile,this.wishlist);
