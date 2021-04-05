@@ -214,7 +214,7 @@ class SignupContentState extends State<SignupContent>{
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text("Sign Up 🎁",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
-        _buildLoginForm()
+        _buildLoginForm(context)
       ]
     );
 
@@ -232,7 +232,7 @@ class SignupContentState extends State<SignupContent>{
     }
   }
 
-  Widget _buildLoginForm(){
+  Widget _buildLoginForm(BuildContext context){
     _formKey.currentState?.validate();
     return
     Form(
@@ -310,17 +310,18 @@ class SignupContentState extends State<SignupContent>{
                       widget.controller.signUp(widget.controller.email,widget.controller.nickname,widget.controller.username,widget.controller.password)
                       .then((value){
                           print(value);
+  
+
                           setState(() {
                             switch(value){
                               case 'success':
-                                //Navigate to Profile View
-                                Navigator.pushReplacementNamed(context, '/signin');
                                 widget.controller.profileService.getProfileForUID(widget.controller.authService.auth.currentUser.uid)
                                 .then((value){
                                   //Auth User exists
                                   if(value != null){
                                     //Profile exists for AuthID
-                                    Navigator.pushNamed(context, '/${value.username}');
+                                    print(value.username);
+                                    Navigator.pushReplacementNamed(context, '/${value.username}');
                                   }
                                 });
                                 break;
