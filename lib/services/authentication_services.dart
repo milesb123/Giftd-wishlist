@@ -23,6 +23,13 @@ class AuthenticationService{
     auth.signOut();
   }
 
+  Future<UserCredential> signUp(String email, String password) async {
+      return auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password
+      );
+  }
+
   Future<String> signIn(String email,String password, Function(String) displayMessage) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
@@ -41,9 +48,7 @@ class AuthenticationService{
       }
 
     } on FirebaseAuthException catch (e) {
-      print(e);
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
         displayMessage('No user exists for this email');
       }
       else{

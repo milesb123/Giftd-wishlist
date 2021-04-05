@@ -11,10 +11,10 @@ class SigninController{
   String email;
   String password;
 
-  String errorMessage = ""; //"This username or password is invalid";
+  String errorMessage = ""; 
   bool loading = false;
   
-  void signIn(String email,String password,Function(void Function() f) setState,dynamic context,GlobalKey<FormState> formKey){
+  void signIn(String email,String password,Function(void Function() f) setState,dynamic context){
     
     authService.signIn(email,password,(String s){
       setState(() {

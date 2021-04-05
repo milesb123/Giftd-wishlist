@@ -101,7 +101,7 @@ class DynamicAppBar{
           children: [
             GestureDetector(
               onTap:(){
-                print("Tapped");
+                Navigator.pushReplacementNamed(context, '/');
               },
               child:
               Image.asset("assets/images/logo_capsule.png",height:50)
@@ -210,7 +210,6 @@ class WishlistDynamicAppBar{
   }
 
   Widget desktopNavBar(BuildContext context){
-    print("Rebuilt");
     return
     Container(
       //height:80,
@@ -228,7 +227,7 @@ class WishlistDynamicAppBar{
           children: [
             GestureDetector(
               onTap:(){
-                print("Tapped");
+                Navigator.pushReplacementNamed(context, '/');
               },
               child:
               Image.asset("assets/images/logo_capsule.png",height:50)
@@ -260,7 +259,6 @@ class NavbarComponents{
   var profileService = locator<ProfileService>();
 
   Widget desktopNavButtonRow(bool signedIn,BuildContext context){
-    print(["signedIn",signedIn]);
     if(signedIn){
       return
       Row(
@@ -308,7 +306,9 @@ class NavbarComponents{
           SizedBox(width:20)
           ,
           OutlinedButton(
-            onPressed: ()=>{},
+            onPressed: (){
+              Navigator.pushReplacementNamed(context, '/signup');
+            },
             child: 
             Padding(
               padding: EdgeInsets.fromLTRB(12, 10, 12, 10),

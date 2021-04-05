@@ -7,6 +7,24 @@ class WishlistService{
   CollectionReference profiles = FirebaseFirestore.instance.collection('Profiles');
   CollectionReference public_lists = FirebaseFirestore.instance.collection('Public_Lists');
 
+  Future<String> createNewWishlist(String ownerID ,List<Map> items, Map theme) async {
+    //Mandatory Fields: items, ownerID, theme
+    try {
+      var wishlist = public_lists.doc();
+
+      await wishlist.set({
+        'items':items,
+        'ownerID':ownerID,
+        'theme':theme
+      });
+      
+      return wishlist.id;
+    }
+    catch (e) {
+      return null;
+    }
+  }
+
   Future<Wishlist> getWishlistForOwnerID(String userID,Function(dynamic) error) {
       // Call the user's CollectionReference to add a new user
       return public_lists
@@ -69,11 +87,7 @@ class WishlistService{
 
               //Prepare Theme
               WishlistTheme theme = buildTheme(doc.data()['theme']);
-
-              if(items.isEmpty){
-                print(items);
-                error("Empty List");
-              }
+              
 
               if(ownerID == null){
                 error("Required fields missing");
@@ -108,7 +122,6 @@ class WishlistService{
 
     switch(type){
       case "solid":{
-        print("Solid detected");
         Map rawAccent = rawTheme['accentColor'];
         Map rawColor = rawTheme['backgroundColor'];
 

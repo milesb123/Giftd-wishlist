@@ -72,10 +72,13 @@ class WishlistPageContoller{
   }
 
   Future<void> getSetProfile(String username){
-    return profileService.getProfileForUsername(username,null)
+    return profileService.getProfileForUsername(username)
     .then((profile){
       currentProfile = profile;
       return profile;
+    })
+    .catchError((e){
+      //TODO: HANDLE ERROR
     });
   }
 

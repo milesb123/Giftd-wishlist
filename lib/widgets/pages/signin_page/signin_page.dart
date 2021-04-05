@@ -173,7 +173,8 @@ class SigninContentState extends State<SigninContent>{
                       setState(() {
                         widget.controller.loading = true;
                       });
-                      widget.controller.signIn(widget.controller.email, widget.controller.password, setState, context, _formKey);
+                      
+                      widget.controller.signIn(widget.controller.email, widget.controller.password, setState, context);
                     },
                     child: 
                     Padding(
