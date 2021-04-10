@@ -41,6 +41,8 @@ class WishlistTheme{
   Widget background;
   Widget navBackground;
 
+  static WishlistTheme defaultTheme = WishlistTheme().solidInit(Colors.white, Colors.black);
+
   //default
   WishlistTheme(){
     type = "solid";

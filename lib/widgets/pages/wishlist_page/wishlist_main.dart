@@ -32,8 +32,6 @@ class WishlistPage extends StatefulWidget {
 
 class WishlistPageState extends State<WishlistPage> {
   
-  var defaultTheme = new WishlistTheme().solidInit(Colors.white, Colors.black);
-
   Widget build(BuildContext context) {
     return getScaffold(context);
   }
@@ -63,10 +61,6 @@ class WishlistPageState extends State<WishlistPage> {
         );
       }
     });
-  }
-
-  Widget failureView(){
-    return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
   }
 
   Widget desktopStructure(BuildContext context){
@@ -137,33 +131,87 @@ class WishlistPageState extends State<WishlistPage> {
   }
 
   WishlistTheme getTheme(){
-    return widget.controller.wishlist == null ? defaultTheme : widget.controller.wishlist.theme;
+    return widget.controller.wishlist == null ? WishlistTheme.defaultTheme : widget.controller.wishlist.theme;
   }
 
 }
 
-//Wishlist Content is NOT responsible for background
-class WishlistContent extends StatelessWidget{
+class WishlistContent extends StatefulWidget{
 
   final Profile profile;
   final Wishlist wishlist;
+  final bool isLocalUser;
+
+  bool emailSent = false;
 
   var authService = locator<AuthenticationService>();
   var profileService = locator<ProfileService>();
 
-  WishlistContent(this.profile,this.wishlist);
+  WishlistContent(this.profile,this.wishlist,this.isLocalUser);
+  
+  WishlistContentState createState() => WishlistContentState();
+}
+
+//Wishlist Content is NOT responsible for background
+class WishlistContentState extends State<WishlistContent>{
 
   Widget build(BuildContext context) {
 
-    List<Widget> wishlistHeaderComponents = [];
+    if(!widget.authService.userIsLocalUser(widget.profile.authID)){ 
+      return content(context);
+    }
+    else{
+      //Is Local User's Page
+      if(widget.authService.auth.currentUser.emailVerified){
+        //Is Verified
+        return content(context);
+      }
+      else{
+        return verifyEmailView(context);
+      }
+    }
+  }
 
-    wishlistHeaderComponents.add(Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)));
-    
-    
-    if(authService.userIsLocalUser(profile.authID)){
-      wishlistHeaderComponents.add(Icon(Icons.add,color: wishlist.theme.accentColor,size: 30));
+   Widget verifyEmailView(BuildContext context){
+    Widget subtext;
+
+    if(widget.emailSent){
+      subtext = 
+      TextButton(
+        style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){
+          widget.authService.auth.currentUser.sendEmailVerification()
+          .then((value){
+            setState(() {
+              widget.emailSent = true;
+            });
+          });
+        }, 
+        child: Text("Can't find the email? Click here to resend it",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))
+      );
+    }
+    else{
+      subtext = Text("Email Sent!",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline));
     }
 
+    return
+    SizedBox(
+      width:double.infinity,
+      child:
+      Container(
+        child:
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Please check your inbox and verify your email 💕",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: WishlistTheme.defaultTheme.accentColor)),
+            SizedBox(height:20),
+            subtext
+          ],
+        )
+      )
+    );
+  }
+
+  Widget content(BuildContext context){
     return
     SizedBox(
       width:double.infinity,
@@ -174,14 +222,7 @@ class WishlistContent extends StatelessWidget{
           children: [
             listHeader(),
             SizedBox(height:20),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: wishlistHeaderComponents
-              ),
-            ),
+            wishlistTitleRow(),
             SizedBox(height:25),
             itemList(),
             SizedBox(height:60),
@@ -197,32 +238,58 @@ class WishlistContent extends StatelessWidget{
     );
   }
 
+  Widget wishlistTitleRow(){
+    List<Widget> wishlistHeaderComponents = [];
+
+    wishlistHeaderComponents.add(Text("Wishlist: ",style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:widget.wishlist.theme.accentColor)));
+    
+    
+    if(widget.isLocalUser){
+      wishlistHeaderComponents.add(Icon(Icons.add,color: widget.wishlist.theme.accentColor,size: 30));
+    }
+
+    return
+    Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      child: 
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: wishlistHeaderComponents
+      ),
+    );
+
+  }
+
   Widget actionPromptBox(BuildContext context){
-    if(authService.userSignedIn()){
-      if(authService.userIsLocalUser(profile.authID)){
+    if(widget.authService.userSignedIn()){
+      if(widget.isLocalUser){
         return
         Column(
           children:[
-            Text("Shoes in exactly my size? No way!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+            Text("Start Recieving Gifts!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:widget.wishlist.theme.accentColor)),
             SizedBox(height:20),
-            OutlinedButton(
-              onPressed: ()=>{},
-              child: 
-              Padding(
-                padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Share",style: TextStyle(fontSize:14)),
-                    SizedBox(width:5),
-                    Icon(Icons.share),
-                  ],
-                )
+            SizedBox(
+              width: 150,
+              child: OutlinedButton(
+                onPressed: () => {Clipboard.setData(new ClipboardData(text: "https://giftd-wishlist.vercel.app/#/"+widget.profile.username))},
+                child: 
+                Padding(
+                  padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+                  child: 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Copy Link",style: TextStyle(fontSize:14)),
+                      SizedBox(width:5),
+                      Icon(Icons.link,size: 14,),
+                    ],
+                  )
+                ),
+                style: HelperStyles.defaultButtonStyle(true,widget.wishlist.theme.accentColor),
               ),
-              style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
             ),
             SizedBox(height:20),
-            Text("Start recieving gifts by sharing with your friends and followers",textAlign: TextAlign.center,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+            Text("Share you wishlist with your friends and followers",textAlign: TextAlign.center,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:widget.wishlist.theme.accentColor)),
           ]
         );
       }
@@ -230,40 +297,31 @@ class WishlistContent extends StatelessWidget{
         return
         Column(
           children:[
-            Text("Inspired? Edit your own wishlist!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+            Text("Inspired? Edit your own wishlist!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:widget.wishlist.theme.accentColor)),
             SizedBox(height:20),
             OutlinedButton(
-              onPressed: ()=>{},
+              onPressed: (){
+                widget.profileService.getProfileForUID(widget.authService.auth.currentUser.uid)
+                .then((value){
+                  if(value != null){
+                    Navigator.pushReplacementNamed(context, '/${value.username}');
+                  }
+                });
+              },
               child: 
               Padding(
                 padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                child:
-                OutlinedButton(
-                  onPressed: (){
-                    profileService.getProfileForUID(authService.auth.currentUser.uid)
-                    .then((value){
-                      if(value != null){
-                        Navigator.pushReplacementNamed(context, '/${value.username}');
-                      }
-                    });
-                  },
-                  child: 
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                    child: 
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.person),
-                        SizedBox(width:5),
-                        Text("Profile",style: TextStyle(fontSize:14)),
-                      ],
-                    )
-                  ),
-                  style: HelperStyles.defaultButtonStyle(true,Colors.white),
+                child: 
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.person),
+                    SizedBox(width:5),
+                    Text("Profile",style: TextStyle(fontSize:14)),
+                  ],
                 )
               ),
-              style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+              style: HelperStyles.defaultButtonStyle(true,Colors.white),
             ),
             SizedBox(height:20)
           ]
@@ -274,7 +332,7 @@ class WishlistContent extends StatelessWidget{
       return
       Column(
         children:[
-          Text("Inspired? Make your own wishlist!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+          Text("Inspired? Make your own wishlist!",textAlign: TextAlign.center,style:TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color:widget.wishlist.theme.accentColor)),
           SizedBox(height:20),
           OutlinedButton(
             onPressed: ()=>{},
@@ -283,10 +341,10 @@ class WishlistContent extends StatelessWidget{
               padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
               child: Text("Sign Up 🎁",style: TextStyle(fontSize:14))
             ),
-            style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+            style: HelperStyles.defaultButtonStyle(true,widget.wishlist.theme.accentColor),
           ),
           SizedBox(height:20),
-          Text("You can sign up with Twitter, Instagram and more",textAlign: TextAlign.center,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+          Text("You can sign up with Twitter, Instagram and more",textAlign: TextAlign.center,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w300,color:widget.wishlist.theme.accentColor)),
         ]
       );
     }
@@ -296,8 +354,8 @@ class WishlistContent extends StatelessWidget{
   Widget itemList(){
     List<Widget> children = [];
 
-    for(int i = 0; i<wishlist.items.length; i++){
-      children.add(listItemView(wishlist.items[i],i));
+    for(int i = 0; i<widget.wishlist.items.length; i++){
+      children.add(listItemView(widget.wishlist.items[i],i));
       children.add(SizedBox(height:20));
     }
 
@@ -314,7 +372,7 @@ class WishlistContent extends StatelessWidget{
           child: Align(
             alignment: Alignment.centerLeft,
             child:
-            Text("${(index+1).toString()}. ${item.message}",style:TextStyle(fontSize: 18,color: wishlist.theme.accentColor))
+            Text("${(index+1).toString()}. ${item.message}",style:TextStyle(fontSize: 18,color: widget.wishlist.theme.accentColor))
           ),
         ),
         SizedBox(height:10)
@@ -378,7 +436,7 @@ class WishlistContent extends StatelessWidget{
                     onPressed: ()=>{
                       openURL(item.links[link].url)
                     },
-                    style: HelperStyles.defaultButtonStyle(false,wishlist.theme.accentColor),
+                    style: HelperStyles.defaultButtonStyle(false,widget.wishlist.theme.accentColor),
                   ),
                 );
               }
@@ -388,7 +446,7 @@ class WishlistContent extends StatelessWidget{
       ]);
     }
 
-    if(authService.userIsLocalUser(profile.authID)){
+    if(widget.isLocalUser){
       children.addAll([
           SizedBox(height:20),
           Padding(
@@ -396,8 +454,8 @@ class WishlistContent extends StatelessWidget{
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(Icons.delete,size:20,color: wishlist.theme.accentColor),
-                Icon(Icons.edit,size:20,color: wishlist.theme.accentColor)
+                Icon(Icons.delete,size:20,color: widget.wishlist.theme.accentColor),
+                Icon(Icons.edit,size:20,color: widget.wishlist.theme.accentColor)
               ]
               ),
           )
@@ -409,7 +467,7 @@ class WishlistContent extends StatelessWidget{
       SizedBox(height:20),
       Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-        child: Container(height:1, color:wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
+        child: Container(height:1, color:widget.wishlist.theme.accentColor.withOpacity(0.25), width:double.infinity),
       )
     ]);
 
@@ -426,7 +484,7 @@ class WishlistContent extends StatelessWidget{
 
     buttonList.add(
       OutlinedButton(
-        onPressed: () => {Clipboard.setData(new ClipboardData(text: "https://giftd-wishlist.vercel.app/#/"+profile.username))},
+        onPressed: () => {Clipboard.setData(new ClipboardData(text: "https://giftd-wishlist.vercel.app/#/"+widget.profile.username))},
         child: 
         Padding(
           padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -439,11 +497,11 @@ class WishlistContent extends StatelessWidget{
             ],
           )
         ),
-        style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+        style: HelperStyles.defaultButtonStyle(true,widget.wishlist.theme.accentColor),
       ),
     );
 
-    if(authService.userIsLocalUser(profile.authID)){
+    if(widget.isLocalUser){
       buttonList.addAll(
         [
         SizedBox(width:20),
@@ -461,7 +519,7 @@ class WishlistContent extends StatelessWidget{
               ],
             )
           ),
-          style: HelperStyles.defaultButtonStyle(true,wishlist.theme.accentColor),
+          style: HelperStyles.defaultButtonStyle(true,widget.wishlist.theme.accentColor),
         )
         ]
       );
@@ -481,15 +539,15 @@ class WishlistContent extends StatelessWidget{
               shape: BoxShape.circle,
               image:
               DecorationImage(
-                image: NetworkImage(profile.imageURL),
+                image: NetworkImage(widget.profile.imageURL),
                 fit:BoxFit.cover
               ),
             ), 
           ),
           SizedBox(height:10),
-          Text(profile.nickname,textAlign: TextAlign.center,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:wishlist.theme.accentColor)),
+          Text(widget.profile.nickname,textAlign: TextAlign.center,style:TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color:widget.wishlist.theme.accentColor)),
           SizedBox(height:5),
-          Text(profile.bio,textAlign: TextAlign.center,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:wishlist.theme.accentColor)),
+          Text(widget.profile.bio,textAlign: TextAlign.center,style:TextStyle(fontSize: 18,fontWeight: FontWeight.w300,color:widget.wishlist.theme.accentColor)),
           SizedBox(height:18),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

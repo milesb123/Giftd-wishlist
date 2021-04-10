@@ -49,7 +49,7 @@ class WishlistPageContoller{
                       initialData: null,
                       builder: (context,snapshot){
                         //Ensures that the view is reloaded on change of auth state
-                        return WishlistContent(currentProfile,wishlist);
+                        return WishlistContent(currentProfile,wishlist, authService.userIsLocalUser(currentProfile.authID));
                       }
                     );
                   }

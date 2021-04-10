@@ -1,7 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
-
 
 class AuthenticationService{
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -24,37 +21,45 @@ class AuthenticationService{
   }
 
   Future<UserCredential> signUp(String email, String password) async {
-      return auth.createUserWithEmailAndPassword(
+
+      return 
+      auth.createUserWithEmailAndPassword(
         email: email,
         password: password
-      );
+      )
+      .then((value) async {
+        await value.user.sendEmailVerification();
+        return value;
+      })
+      .catchError((e){
+        throw(e);
+      });
   }
 
-  Future<String> signIn(String email,String password, Function(String) displayMessage) async {
-    try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+  Future<UserCredential> signIn(String email,String password) async {
+      //Handle Email Verifications
+
+      return auth.signInWithEmailAndPassword(
         email: email,
         password: password
-      );
-      
-      if(userCredential.user.emailVerified){
-        //Persist user credential uid        
-        return userCredential.user.uid;
-      }
-      else{
-        //TODO: Navigate to email verification page
-        //displayMessage('Please verify your email to sign in');
-        return userCredential.user.uid;
-      }
-
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        displayMessage('No user exists for this email');
-      }
-      else{
-        displayMessage('The username or password is invalid');
-      }
-    }
-    return null;
+      )
+      .then((value) async {
+        if(value.user.emailVerified){
+          return value;
+        }
+        else{
+          await value.user.sendEmailVerification();
+          return value;
+        }
+      })
+      .catchError((e){
+        throw(e);
+      });
   }
+
+  Future<void> resetPassword(String email){
+    return auth.sendPasswordResetEmail(email: email);
+  }
+
 }
+

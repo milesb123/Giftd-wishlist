@@ -127,7 +127,7 @@ class SigninContentState extends State<SigninContent>{
   @override
   Widget build(BuildContext context){
 
-    return widget.controller.loading ? _buildLoadingCircle() : _buildContent();
+    return _buildContent();
   }
 
   Widget _buildLoadingCircle(){
@@ -154,7 +154,7 @@ class SigninContentState extends State<SigninContent>{
               _buildPassword(),
               SizedBox(height:20),
               Text(widget.controller.errorMessage,style: TextStyle(fontSize: 14,color: Colors.red)),
-              SizedBox(height: 60),
+              SizedBox(height: 40),
               Center(
                 child: 
                 ConstrainedBox(
@@ -174,7 +174,43 @@ class SigninContentState extends State<SigninContent>{
                         widget.controller.loading = true;
                       });
                       
-                      widget.controller.signIn(widget.controller.email, widget.controller.password, setState, context);
+                      widget.controller.signIn(widget.controller.email, widget.controller.password)
+                      .then((value){
+                        //Profile returned
+                        
+                        if(value != null){
+                          Navigator.pushReplacementNamed(context, '/${value.username}');
+                        }
+                        else{
+                          print("Not Verified");
+                        }
+                        
+                        setState(() {
+                          widget.controller.loading = false;
+                        });
+                      })
+                      .catchError((e){
+                          setState(() {
+                            //set error message accordingly
+                            switch(e){
+                              case 'wrong-password':
+                                widget.controller.errorMessage = "Email or password is invalid";
+                                break;
+                              case 'invalid-email':
+                                widget.controller.errorMessage = "Email or password is invalid";
+                                break;
+                              case 'user-not-found':
+                                widget.controller.errorMessage = "Email or password is invalid";
+                                break;
+                              default:
+                                print(e);
+                                widget.controller.errorMessage = "Something went wrong, please check your connection and try again";
+                                break;
+                            }
+                            
+                            widget.controller.loading = false;
+                          });
+                      });
                     },
                     child: 
                     Padding(
@@ -192,7 +228,7 @@ class SigninContentState extends State<SigninContent>{
                   constraints: BoxConstraints.tightFor(width:double.infinity),
                   child: OutlinedButton(
                     onPressed: (){
-                      
+                      Navigator.pushReplacementNamed(context, '/signup');
                     },
                     child: 
                     Padding(
@@ -204,7 +240,14 @@ class SigninContentState extends State<SigninContent>{
                 ),
               ),
               SizedBox(height:20),
-              Center(child: TextButton(style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){print("clicked");}, child: Text("Forgot Password? Reset it here",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))))
+              Center(child: 
+                TextButton(
+                  style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){Navigator.pushReplacementNamed(context, '/password_reset');}, 
+                  child: Text("Forgot Password? Reset it here",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))
+                )
+              ),
+              SizedBox(height:20),
+              widget.controller.loading ? _buildLoadingCircle() : SizedBox(height:20)
             ],
           )
         )
@@ -227,7 +270,7 @@ class SigninContentState extends State<SigninContent>{
       ),
       validator:(String value){
         if(value.isEmpty){
-          return 'Username is required';
+          return 'Email is required';
         }
         return null;
       },

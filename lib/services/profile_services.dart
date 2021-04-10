@@ -89,7 +89,7 @@ class ProfileService{
         }
       })
       .catchError((error) {
-        throw(error);
+        throw(error.code);
       });
   } 
 
