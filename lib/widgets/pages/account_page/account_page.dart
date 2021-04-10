@@ -59,11 +59,11 @@ class AccountPage extends StatelessWidget{
                       border: 
                       Border(
                         left: BorderSide(
-                          color: Colors.white.withOpacity(1),
+                          color: Colors.white.withOpacity(0),
                           width: 1.0,
                         ),
                         right: BorderSide(
-                          color: Colors.white.withOpacity(1),
+                          color: Colors.white.withOpacity(0),
                           width: 1.0,
                         ),
                       ),
@@ -89,7 +89,7 @@ class AccountPage extends StatelessWidget{
       Column(
         children: [
           DynamicAppBar().desktopNavBar(context),
-          SizedBox(height:1,width:double.infinity,child: Container(color:Colors.white.withOpacity(1)))
+          SizedBox(height:1,width:double.infinity,child: Container(color:Colors.white.withOpacity(0)))
         ],
       ),
     ]);
@@ -142,11 +142,161 @@ class AccountContentState extends State<AccountContent>{
     Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Edit Your Profile",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
-          SizedBox(height:20),
-          Text("Edit the fields below to edit your profile",style: TextStyle(fontSize: 16,color: Colors.white)),
-          SizedBox(height:100),
+          Text("Profile Information",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
+          SizedBox(height:30),
+          UsernameField(),
+          SizedBox(height:30),
+          NicknameField(),
+          SizedBox(height:30),
+          BioField()
         ],
       );
   }
+}
+
+class UsernameField extends StatefulWidget{
+
+  UsernameFieldState createState() => UsernameFieldState();
+
+}
+
+class UsernameFieldState extends State<UsernameField>{
+
+  @override
+  Widget build(BuildContext context) {
+    return
+    Form(
+      child:
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Text("Username",style: TextStyle(fontSize: 16,color: Colors.white)),
+        TextFormField(
+          style: TextStyle(color:Colors.white),
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: 'Username',
+            hintStyle: TextStyle(color:Colors.grey),
+            border: UnderlineInputBorder(),
+            enabledBorder: 
+            const UnderlineInputBorder(
+            // width: 0.0 produces a thin "hairline" border
+              borderSide: const BorderSide(color: Colors.white),
+            ),
+          ),
+          validator:(String value){
+            if(value.isEmpty){
+              return 'Username is required';
+            }
+            
+            //widget.controller.email = value;
+
+            return null;
+          },
+          onSaved: (String value){
+            
+          },
+        )
+      ])
+    );
+
+  }
+
+}
+
+class NicknameField extends StatefulWidget{
+
+  NicknameFieldState createState() => NicknameFieldState();
+
+}
+
+class NicknameFieldState extends State<NicknameField>{
+
+  @override
+  Widget build(BuildContext context) {
+    return
+    Form(
+      child:
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Text("Nickname",style: TextStyle(fontSize: 16,color: Colors.white)),
+        TextFormField(
+          style: TextStyle(color:Colors.white),
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: 'Nickname',
+            hintStyle: TextStyle(color:Colors.grey),
+            border: UnderlineInputBorder(),
+            enabledBorder: 
+            const UnderlineInputBorder(
+            // width: 0.0 produces a thin "hairline" border
+              borderSide: const BorderSide(color: Colors.white),
+            ),
+          ),
+          validator:(String value){
+            if(value.isEmpty){
+              return 'Nickname is required';
+            }
+            
+            //widget.controller.email = value;
+
+            return null;
+          },
+          onSaved: (String value){
+            
+          },
+        )
+      ])
+    );
+
+  }
+
+}
+
+class BioField extends StatefulWidget{
+
+ BioFieldState createState() => BioFieldState();
+
+}
+
+class BioFieldState extends State<BioField>{
+
+  @override
+  Widget build(BuildContext context) {
+    return
+    Form(
+      child:
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Text("Bio",style: TextStyle(fontSize: 16,color: Colors.white)),
+        TextFormField(
+          style: TextStyle(color:Colors.white),
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            hintText: 'Add a bio to your profile',
+            hintStyle: TextStyle(color:Colors.grey),
+            border: UnderlineInputBorder(),
+            enabledBorder: 
+            const UnderlineInputBorder(
+            // width: 0.0 produces a thin "hairline" border
+              borderSide: const BorderSide(color: Colors.white),
+            ),
+          ),
+          validator:(String value){
+            
+            //widget.controller.email = value;
+
+            return null;
+          },
+          onSaved: (String value){
+            
+          },
+        )
+      ])
+    );
+
+  }
+
 }
