@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/widgets/navbar/dynamic_navbar.dart';
 
 class AccountPage extends StatelessWidget{
@@ -148,7 +149,32 @@ class AccountContentState extends State<AccountContent>{
           SizedBox(height:30),
           NicknameField(),
           SizedBox(height:30),
-          BioField()
+          BioField(),
+          SizedBox(height:30),
+          Text("Sensitive Information",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
+          SizedBox(height:20),
+          Text("Email",style: TextStyle(fontSize: 16,color: Colors.white)),
+          SizedBox(height:10),
+          Text("milesbroomfield@yahoo.com",style: TextStyle(fontSize: 16,color: Colors.grey)),
+          SizedBox(height:20),
+          TextButton(
+            style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){ 
+            }, 
+            child: Text("Update Email",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))
+          ),
+          SizedBox(height:20),
+          TextButton(
+            style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){ 
+            }, 
+            child: Text("Update Password",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))
+          ),
+          SizedBox(height:20),
+          TextButton(
+            style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){ 
+            }, 
+            child: Text("Forgot Password",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300,color: Colors.white,decoration: TextDecoration.underline))
+          ),
+          SizedBox(height:100),
         ],
       );
   }
@@ -156,22 +182,29 @@ class AccountContentState extends State<AccountContent>{
 
 class UsernameField extends StatefulWidget{
 
+  TextEditingController textController = TextEditingController(text: "old name");
+  String a = "a";
+
   UsernameFieldState createState() => UsernameFieldState();
 
 }
 
 class UsernameFieldState extends State<UsernameField>{
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return
     Form(
+      key:_formKey,
       child:
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
         Text("Username",style: TextStyle(fontSize: 16,color: Colors.white)),
         TextFormField(
+          controller: widget.textController,
           style: TextStyle(color:Colors.white),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
@@ -188,13 +221,32 @@ class UsernameFieldState extends State<UsernameField>{
             if(value.isEmpty){
               return 'Username is required';
             }
-            
-            //widget.controller.email = value;
+                      
+            ////Some profile value that may change or remain unchanged
+            widget.a = "new name";
+
+            //Update field in database, on success update local profile object
 
             return null;
           },
-          onSaved: (String value){
+          onFieldSubmitted: (String value){
+            _formKey.currentState.validate();
+
             
+
+            _formKey.currentState.save();
+          },
+          onSaved: (String value){
+
+            setState(() {
+              widget.textController.value = 
+              TextEditingValue(
+                text: widget.a,
+                selection: TextSelection.fromPosition(
+                  TextPosition(offset: widget.a.length),
+                ),
+              );
+            });
           },
         )
       ])
@@ -222,6 +274,7 @@ class NicknameFieldState extends State<NicknameField>{
         children: [
         Text("Nickname",style: TextStyle(fontSize: 16,color: Colors.white)),
         TextFormField(
+          initialValue: "Miles Morales",
           style: TextStyle(color:Colors.white),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
@@ -272,6 +325,7 @@ class BioFieldState extends State<BioField>{
         children: [
         Text("Bio",style: TextStyle(fontSize: 16,color: Colors.white)),
         TextFormField(
+          initialValue: "You can nice me if you want 😁",
           style: TextStyle(color:Colors.white),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
