@@ -4,6 +4,7 @@ import 'dart:js';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:responsive_web/helper/helper.dart';
 import 'package:responsive_web/models/profile.dart';
 import 'package:responsive_web/models/wishlist.dart';
@@ -16,13 +17,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 class WishlistPage extends StatefulWidget { 
 
-  WishlistPageContoller controller;// = WishlistPageContoller("bad_gy4");
+  WishlistPageContoller controller;
+  Widget content;
 
   WishlistPage(String username){
     this.controller = WishlistPageContoller(username);
   }
 
-  static WishlistPage content(String username){
+  static WishlistPage createPage(String username){
     return WishlistPage(username);
   }
 
@@ -33,21 +35,68 @@ class WishlistPage extends StatefulWidget {
 class WishlistPageState extends State<WishlistPage> {
   
   Widget build(BuildContext context) {
-    return getScaffold(context);
+    //return getScaffold(context);
+    return
+    FutureBuilder(
+      future: widget.controller.getSetProfile("island_gy4l"),
+      builder: (context,proSnap){
+        if(proSnap.connectionState == ConnectionState.done){
+          widget.controller.profile = proSnap.data;
+          if(proSnap.data == null){
+            widget.content = Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: WishlistTheme.defaultTheme.accentColor)));
+            return getScaffold(context, null);
+          }
+          else{
+            return
+            FutureBuilder(
+              future: widget.controller.getSetWishlist(proSnap.data),
+              builder: (context,wishSnap){
+                if(wishSnap.connectionState == ConnectionState.done){
+                  if(wishSnap.data != null){
+                    widget.controller.wishlist = wishSnap.data;
+                    return 
+                    StreamBuilder(
+                      stream:widget.controller.authService.authStream,
+                      initialData: null,
+                      builder: (context,snapshot){
+                        //Ensures that the view is reloaded on change of auth state
+                        print("success");
+                        print(widget.controller.wishlist == null);
+                        widget.content = WishlistContent(widget.controller.profile,widget.controller.wishlist, widget.controller.authService.userIsLocalUser(widget.controller.profile.authID));
+                        return getScaffold(context, widget.controller.wishlist);//WishlistContent(currentProfile,wishlist, authService.userIsLocalUser(currentProfile.authID));
+                      }
+                    );
+                  }
+                  else{
+                    widget.content = Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: WishlistTheme.defaultTheme.accentColor)));
+                    return getScaffold(context, null);
+                  }
+                }
+                else{
+                  widget.content = SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3);
+                  return getScaffold(context, null);
+                }
+              }
+            );
+          }
+        }
+        else{
+          widget.content = SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3);
+          return getScaffold(context, null);
+        }
+      },
+    );
   }
 
-  Widget getScaffold(BuildContext context){
-    
-    //Get profile and wishlist
-
-    //On Successful load
+  Widget getScaffold(BuildContext context,Wishlist wishlist){
+    print("load");
     return
     LayoutBuilder(builder: (context,constraints){
       if(constraints.maxWidth > 700){
         return
         Scaffold(
           backgroundColor: Color.fromRGBO(240, 240, 240, 1),
-          body: desktopStructure(context)
+          body: desktopStructure(context,wishlist)
         );
       }
       else{
@@ -55,7 +104,7 @@ class WishlistPageState extends State<WishlistPage> {
         Scaffold(
           key: widget.controller.mobileDrawerKey,
           backgroundColor: Colors.white,
-          body: mobileStructure(),
+          body: mobileStructure(wishlist),
           drawer:WishlistDynamicAppBar.mobileDrawerContent(),
           drawerScrimColor: Colors.black45.withOpacity(0)
         );
@@ -63,7 +112,7 @@ class WishlistPageState extends State<WishlistPage> {
     });
   }
 
-  Widget desktopStructure(BuildContext context){
+  Widget desktopStructure(BuildContext context,Wishlist wishlist){
     return
     Stack(
       children: [
@@ -79,7 +128,7 @@ class WishlistPageState extends State<WishlistPage> {
               child:
               Stack(
                 children:[
-                  getTheme().background,
+                  getTheme(wishlist).background,
                   Container(
                     child: 
                     ListView(
@@ -87,7 +136,7 @@ class WishlistPageState extends State<WishlistPage> {
                         Padding(
                             //Top padding navbar height
                             padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
-                            child: widget.controller.content,
+                            child: widget.content,
                         ),
                       ]
                     )
@@ -98,27 +147,27 @@ class WishlistPageState extends State<WishlistPage> {
           )
         )
       ),
-      WishlistDynamicAppBar(getTheme()).desktopNavBar(context),
+      WishlistDynamicAppBar(getTheme(wishlist)).desktopNavBar(context),
     ]);
   }
 
-  Widget mobileStructure(){
+  Widget mobileStructure(Wishlist wishlist){
     return
     Column(
       children: [
-        WishlistDynamicAppBar(getTheme()).mobileNavBar(widget.controller),
-        Container(height:1,color: getTheme().accentColor),
+        WishlistDynamicAppBar(getTheme(wishlist)).mobileNavBar(widget.controller),
+        Container(height:1,color: getTheme(wishlist).accentColor),
         Expanded(
           child: 
           Stack(
             children:[
-              getTheme().background,
+              getTheme(wishlist).background,
               Container( 
                 child:
                 ListView(children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: widget.controller.content,
+                    child: widget.content,
                   )
                   ]
                 ),
@@ -130,8 +179,9 @@ class WishlistPageState extends State<WishlistPage> {
     );
   }
 
-  WishlistTheme getTheme(){
-    return widget.controller.wishlist == null ? WishlistTheme.defaultTheme : widget.controller.wishlist.theme;
+  WishlistTheme getTheme(Wishlist wishlist){
+    print(wishlist == null);
+    return wishlist == null ? WishlistTheme.defaultTheme : wishlist.theme;
   }
 
 }
@@ -175,7 +225,7 @@ class WishlistContentState extends State<WishlistContent>{
    Widget verifyEmailView(BuildContext context){
     Widget subtext;
 
-    if(widget.emailSent){
+    if(!widget.emailSent){
       subtext = 
       TextButton(
         style:HelperStyles.defaultButtonStyle(false,Colors.white),onPressed: (){

@@ -26,7 +26,7 @@ class RouteManager{
         return HomePage();
       }
       else{
-        return WishlistPage.content(username);
+        return WishlistPage.createPage(username);
       }
   });
 

@@ -87,7 +87,7 @@ class WishlistService{
 
               //Prepare Theme
               WishlistTheme theme = buildTheme(doc.data()['theme']);
-              
+              print(theme.background);
 
               if(ownerID == null){
                 error("Required fields missing");
@@ -170,17 +170,21 @@ class WishlistService{
       break;
 
       case "urlImage":{
+        print("Image detected");
         Map rawAccent = rawTheme['accentColor'];
         String url = rawTheme['url'];
 
         Color accent = parseColor(rawAccent);
 
         if(rawAccent == null || url == null || accent == null){
+          print("nulled");
           return null;
         }
         
         //Value for color will be null if a navColor is not present
         Color navColor = parseColor(rawTheme['navColor']);
+
+        print(url);
 
         //Build Theme
         return WishlistTheme().urlImageInit(accent, url, navColor);

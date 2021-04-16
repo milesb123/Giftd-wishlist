@@ -15,79 +15,68 @@ class WishlistPageContoller{
   
   //Cached Wishlist
   Wishlist wishlist;
-
   //Cached Profile
-  Profile currentProfile;
-
-  var defaultTheme = new WishlistTheme().solidInit(Colors.white, Colors.black);
+  Profile profile;
 
   var authService = locator<AuthenticationService>();
   var profileService = locator<ProfileService>();
   var wishlistService = locator<WishlistService>();
 
   GlobalKey<ScaffoldState> mobileDrawerKey = GlobalKey();
-  Widget content;// = SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3);
 
   WishlistPageContoller(String username){
-      content = FutureBuilder(
-      future: getSetProfile(username),
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(currentProfile == null){
-            return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
-          }
-          else{
-            return
-            FutureBuilder(
-              future: getSetWishlist(currentProfile),
-              builder: (context,snapshot){
-                if(snapshot.connectionState == ConnectionState.done){
-                  if(wishlist != null){
-                    return 
-                    StreamBuilder(
-                      stream:authService.authStream,
-                      initialData: null,
-                      builder: (context,snapshot){
-                        //Ensures that the view is reloaded on change of auth state
-                        return WishlistContent(currentProfile,wishlist, authService.userIsLocalUser(currentProfile.authID));
-                      }
-                    );
-                  }
-                  else{
-                    return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
-                  }
-                }
-                else{
-                  return SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3);
-                }
-              }
-            );
-          }
-        }
-        else{
-          return SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3);
-        }
-      },
-    );
+
+    //content = Text("");
+      
+    //   FutureBuilder(
+    //   future: getSetProfile(username),
+    //   builder: (context,snapshot){
+    //     if(snapshot.connectionState == ConnectionState.done){
+    //       if(currentProfile == null){
+    //         return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
+    //       }
+    //       else{
+    //         return
+    //         FutureBuilder(
+    //           future: getSetWishlist(currentProfile),
+    //           builder: (context,snapshot){
+    //             if(snapshot.connectionState == ConnectionState.done){
+    //               if(wishlist != null){
+    //                 print("loaded");
+    //                 return 
+    //                 StreamBuilder(
+    //                   stream:authService.authStream,
+    //                   initialData: null,
+    //                   builder: (context,snapshot){
+    //                     //Ensures that the view is reloaded on change of auth state
+    //                     return WishlistContent(currentProfile,wishlist, authService.userIsLocalUser(currentProfile.authID));
+    //                   }
+    //                 );
+    //               }
+    //               else{
+    //                 return Center(child: Text("Could not load this wishlist 💔",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: defaultTheme.accentColor)));
+    //               }
+    //             }
+    //             else{
+    //               return SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3);
+    //             }
+    //           }
+    //         );
+    //       }
+    //     }
+    //     else{
+    //       return SpinKitDualRing(color: Colors.white,size: 30,lineWidth: 3);
+    //     }
+    //   },
+    // );
   }
 
-  Future<void> getSetProfile(String username){
-    return profileService.getProfileForUsername(username)
-    .then((profile){
-      currentProfile = profile;
-      return profile;
-    })
-    .catchError((e){
-      //TODO: HANDLE ERROR
-    });
+  Future<Profile> getSetProfile(String username){
+    return profileService.getProfileForUsername(username);
   }
 
-  Future<void> getSetWishlist(Profile tempProfile){
-    return wishlistService.getWishlistForOwnerID(tempProfile.userID,null)
-      .then((list){
-        wishlist = list;
-        return list;
-      });
+  Future<Wishlist> getSetWishlist(Profile profile){
+    return wishlistService.getWishlistForOwnerID(profile.userID,null);
   }
 
 }
