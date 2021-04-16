@@ -17,11 +17,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class WishlistPage extends StatefulWidget { 
 
+  String username;
   WishlistPageContoller controller;
   Widget content;
 
   WishlistPage(String username){
     this.controller = WishlistPageContoller(username);
+    this.username = username;
   }
 
   static WishlistPage createPage(String username){
@@ -38,7 +40,7 @@ class WishlistPageState extends State<WishlistPage> {
     //return getScaffold(context);
     return
     FutureBuilder(
-      future: widget.controller.getSetProfile("island_gy4l"),
+      future: widget.controller.getSetProfile(widget.username),
       builder: (context,proSnap){
         if(proSnap.connectionState == ConnectionState.done){
           widget.controller.profile = proSnap.data;
