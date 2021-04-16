@@ -76,7 +76,7 @@ class EmailVerificationPage extends StatelessWidget{
           )
         )
       ),
-      DynamicAppBar().desktopNavBar(context),
+      DynamicAppBar().desktopNavBar(context,mobileDrawerKey),
     ]);
   }
 

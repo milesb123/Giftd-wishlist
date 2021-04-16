@@ -21,8 +21,11 @@ class AccountPage extends StatelessWidget{
       if(constraints.maxWidth > 800){
         return
         Scaffold(
+          key: mobileDrawerKey,
           backgroundColor: Colors.black,
-          body: desktopStructure(context)
+          body: desktopStructure(context),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(),
+          drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }
       else{
@@ -89,7 +92,7 @@ class AccountPage extends StatelessWidget{
       ),
       Column(
         children: [
-          DynamicAppBar().desktopNavBar(context),
+          DynamicAppBar().desktopNavBar(context,mobileDrawerKey),
           SizedBox(height:1,width:double.infinity,child: Container(color:Colors.white.withOpacity(0)))
         ],
       ),

@@ -79,7 +79,7 @@ class SigninPageState extends State<SigninPage>{
           )
         )
       ),
-      DynamicAppBar().desktopNavBar(context),
+      DynamicAppBar().desktopNavBar(context,mobileDrawerKey),
     ]);
   }
 

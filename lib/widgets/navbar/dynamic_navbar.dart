@@ -84,7 +84,7 @@ class DynamicAppBar{
     );
   }
 
-  Widget desktopNavBar(BuildContext context){
+  Widget desktopNavBar(BuildContext context,GlobalKey<ScaffoldState> mobileDrawerKey){
     return
     Container(
       //height:80,
@@ -99,12 +99,25 @@ class DynamicAppBar{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              onTap:(){
-                Navigator.pushReplacementNamed(context, '/');
-              },
-              child:
-              Image.asset("assets/images/logo_capsule.png",height:50)
+            Row(
+              children: [
+                TextButton(
+                  child: Icon(
+                  Icons.menu,
+                  color: WishlistTheme.defaultTheme.accentColor,
+                  size: 30.0,
+                  semanticLabel: 'Menu',
+                  ),
+                  onPressed: ()=>{mobileDrawerKey.currentState.openDrawer()}
+                ),
+                GestureDetector(
+                  onTap:(){
+                    Navigator.pushReplacementNamed(context, '/');
+                  },
+                  child:
+                  Image.asset("assets/images/logo_capsule.png",height:50)
+                ),
+              ],
             ),
             StreamBuilder(
                 stream:authService.authStream,
@@ -140,7 +153,7 @@ class WishlistDynamicAppBar{
   static Widget mobileDrawerContent(){
     return
     Container(
-      width:200,
+      //width:200,
       child: 
       Drawer(
         elevation: 2,
@@ -209,7 +222,7 @@ class WishlistDynamicAppBar{
     );
   }
 
-  Widget desktopNavBar(BuildContext context){
+  Widget desktopNavBar(BuildContext context,WishlistPageContoller controller){
     return
     Container(
       //height:80,
@@ -225,12 +238,25 @@ class WishlistDynamicAppBar{
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              onTap:(){
-                Navigator.pushReplacementNamed(context, '/');
-              },
-              child:
-              Image.asset("assets/images/logo_capsule.png",height:50)
+            Row(
+              children: [
+                TextButton(
+                  child: Icon(
+                  Icons.menu,
+                  color: theme.accentColor,
+                  size: 30.0,
+                  semanticLabel: 'Menu',
+                  ),
+                  onPressed: ()=>{controller.mobileDrawerKey.currentState.openDrawer()}
+                ),
+                GestureDetector(
+                  onTap:(){
+                    Navigator.pushReplacementNamed(context, '/');
+                  },
+                  child:
+                  Image.asset("assets/images/logo_capsule.png",height:50)
+                ),
+              ],
             ),
             StreamBuilder(
               stream:authService.authStream,

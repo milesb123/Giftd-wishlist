@@ -97,8 +97,11 @@ class WishlistPageState extends State<WishlistPage> {
       if(constraints.maxWidth > 700){
         return
         Scaffold(
+          key: widget.controller.mobileDrawerKey,
           backgroundColor: Color.fromRGBO(240, 240, 240, 1),
-          body: desktopStructure(context,wishlist)
+          body: desktopStructure(context,wishlist),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(),
+          drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }
       else{
@@ -149,7 +152,7 @@ class WishlistPageState extends State<WishlistPage> {
           )
         )
       ),
-      WishlistDynamicAppBar(getTheme(wishlist)).desktopNavBar(context),
+      WishlistDynamicAppBar(getTheme(wishlist)).desktopNavBar(context,widget.controller),
     ]);
   }
 

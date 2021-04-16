@@ -94,7 +94,7 @@ class PasswordResetState extends State<PasswordResetPage>{
           )
         )
       ),
-      DynamicAppBar().desktopNavBar(context),
+      DynamicAppBar().desktopNavBar(context,mobileDrawerKey),
     ]);
   }
 

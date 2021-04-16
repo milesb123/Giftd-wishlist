@@ -78,7 +78,7 @@ class SignupPageState extends State<SignupPage>{
           )
         )
       ),
-      DynamicAppBar().desktopNavBar(context),
+      DynamicAppBar().desktopNavBar(context,mobileDrawerKey),
     ]);
   }
 
