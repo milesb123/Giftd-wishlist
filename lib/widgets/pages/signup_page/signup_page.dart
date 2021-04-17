@@ -26,8 +26,11 @@ class SignupPageState extends State<SignupPage>{
       if(constraints.maxWidth > 600){
         return
         Scaffold(
+          key: mobileDrawerKey,
           backgroundColor: Colors.black,
-          body: desktopStructure()
+          body: desktopStructure(),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(context),
+          drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }
       else{
@@ -36,7 +39,7 @@ class SignupPageState extends State<SignupPage>{
           key: mobileDrawerKey,
           backgroundColor: Colors.black,
           body: mobileStructure(),
-          drawer:WishlistDynamicAppBar.mobileDrawerContent(),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(context),
           drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }

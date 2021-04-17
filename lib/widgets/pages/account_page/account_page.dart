@@ -25,7 +25,7 @@ class AccountPage extends StatelessWidget{
           key: mobileDrawerKey,
           backgroundColor: Colors.black,
           body: desktopStructure(context),
-          drawer:WishlistDynamicAppBar.mobileDrawerContent(),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(context),
           drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }
@@ -35,7 +35,7 @@ class AccountPage extends StatelessWidget{
           key: mobileDrawerKey,
           backgroundColor: Colors.black,
           body: mobileStructure(),
-          drawer:WishlistDynamicAppBar.mobileDrawerContent(),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(context),
           drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }

@@ -12,7 +12,7 @@ import 'package:responsive_web/widgets/pages/wishlist_page/wishlist_controller.d
 class DynamicAppBar{
   var authService = locator<AuthenticationService>();
 
-  static Widget mobileDrawerContent(){
+  static Widget mobileDrawerContent(BuildContext context){
     return
     Container(
       width:200,
@@ -34,7 +34,10 @@ class DynamicAppBar{
                   SizedBox(height:20),
                   Text("Sign In",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),
                   SizedBox(height:10),
-                  Text("Sign Up 🎁",style: TextStyle(fontSize:16,decoration: TextDecoration.underline))
+                  Text("Sign Up 🎁",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),
+                  TextButton(child:Text("Account",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),onPressed: (){
+                    Navigator.pushReplacementNamed(context, '/account');
+                  })
                 ]
               )
             ),
@@ -150,7 +153,7 @@ class WishlistDynamicAppBar{
     this.theme = theme;
   }
 
-  static Widget mobileDrawerContent(){
+  static Widget mobileDrawerContent(BuildContext context){
     return
     Container(
       //width:200,
@@ -172,7 +175,11 @@ class WishlistDynamicAppBar{
                   SizedBox(height:20),
                   Text("Sign In",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),
                   SizedBox(height:10),
-                  Text("Sign Up 🎁",style: TextStyle(fontSize:16,decoration: TextDecoration.underline))
+                  Text("Sign Up 🎁",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),
+                  SizedBox(height:10),
+                  TextButton(child:Text("Account",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),onPressed: (){
+                    Navigator.pushReplacementNamed(context, '/account');
+                  })
                 ]
               )
             ),

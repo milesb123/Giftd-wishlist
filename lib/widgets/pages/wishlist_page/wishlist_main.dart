@@ -100,7 +100,7 @@ class WishlistPageState extends State<WishlistPage> {
           key: widget.controller.mobileDrawerKey,
           backgroundColor: Color.fromRGBO(240, 240, 240, 1),
           body: desktopStructure(context,wishlist),
-          drawer:WishlistDynamicAppBar.mobileDrawerContent(),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(context),
           drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }
@@ -110,7 +110,7 @@ class WishlistPageState extends State<WishlistPage> {
           key: widget.controller.mobileDrawerKey,
           backgroundColor: Colors.white,
           body: mobileStructure(wishlist),
-          drawer:WishlistDynamicAppBar.mobileDrawerContent(),
+          drawer:WishlistDynamicAppBar.mobileDrawerContent(context),
           drawerScrimColor: Colors.black45.withOpacity(0)
         );
       }
