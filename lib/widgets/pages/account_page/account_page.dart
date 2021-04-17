@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:responsive_web/helper/helper.dart';
+import 'package:responsive_web/models/profile.dart';
 import 'package:responsive_web/widgets/navbar/dynamic_navbar.dart';
 
 class AccountPage extends StatelessWidget{
@@ -113,7 +114,7 @@ class AccountPage extends StatelessWidget{
                 child:
                 ListView(children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
                     child: AccountContent()
                   )
                   ]
@@ -154,6 +155,7 @@ class AccountContentState extends State<AccountContent>{
           SizedBox(height:30),
           BioField(),
           SizedBox(height:30),
+          SizedBox(height:20),
           Text("Sensitive Information",style:TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold)),
           SizedBox(height:20),
           Text("Email",style: TextStyle(fontSize: 16,color: Colors.white)),
@@ -184,9 +186,9 @@ class AccountContentState extends State<AccountContent>{
 }
 
 class UsernameField extends StatefulWidget{
-
-  TextEditingController textController = TextEditingController(text: "old name");
-  String a = "a";
+  
+  Profile profile;
+  TextEditingController textController = TextEditingController();
 
   UsernameFieldState createState() => UsernameFieldState();
 
@@ -226,9 +228,10 @@ class UsernameFieldState extends State<UsernameField>{
             }
                       
             ////Some profile value that may change or remain unchanged
-            widget.a = "new name";
+            //widget.profile.username = "new name";
 
             //Update field in database, on success update local profile object
+            
 
             return null;
           },
@@ -241,12 +244,25 @@ class UsernameFieldState extends State<UsernameField>{
           },
           onSaved: (String value){
 
+            showDialog(
+              context: context, 
+              builder: (_) => 
+              AlertDialog(
+                title:Text("Success!"),
+                content: Text("Your username has been saved"),
+                actions: [
+                  TextButton(onPressed: (){Navigator.pop(context);}, child: Text("Done"))
+                ],
+              ),
+              barrierDismissible: true
+            );
+
             setState(() {
               widget.textController.value = 
               TextEditingValue(
-                text: widget.a,
+                text: widget.profile.username,
                 selection: TextSelection.fromPosition(
-                  TextPosition(offset: widget.a.length),
+                  TextPosition(offset: widget.profile.username.length),
                 ),
               );
             });
