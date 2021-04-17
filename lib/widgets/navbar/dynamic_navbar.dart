@@ -176,7 +176,7 @@ class WishlistDynamicAppBar{
                   Text("Sign In",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),
                   SizedBox(height:10),
                   Text("Sign Up 🎁",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),
-                  SizedBox(height:10),
+                  SizedBox(height:10), 
                   TextButton(child:Text("Account",style: TextStyle(fontSize:16,decoration: TextDecoration.underline)),onPressed: (){
                     Navigator.pushReplacementNamed(context, '/account');
                   })
